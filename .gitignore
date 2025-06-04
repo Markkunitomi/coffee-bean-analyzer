@@ -154,8 +154,13 @@ Thumbs.db
 
 # Coffee Bean Analyzer specific
 coffee_analysis_*/
+coffee_analysis_*
+analysis_*/
+analysis_*
 output/
 results/
+run_*/
+run_*
 *.png
 *.jpg
 *.jpeg
@@ -163,6 +168,11 @@ results/
 *.tiff
 !docs/images/*.png
 !examples/*.png
+!data/sample/**/*.png
+!data/sample/**/*.jpg
+!data/sample/**/*.jpeg
+!data/sample/**/*.tif
+!data/sample/**/*.tiff
 
 # Model files and large data
 *.pkl
@@ -193,3 +203,10 @@ htmlcov/
 # Local configuration overrides
 local_config.json
 user_config.yaml
+
+# Claude Code configuration files
+.claude/
+.claude_config.json
+claude_config.json
+claude_project.json
+.claude_project.json

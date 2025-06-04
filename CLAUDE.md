@@ -97,3 +97,15 @@ Analysis generates timestamped directories with:
 - Ground truth data available in `tests/data/beans_ground_truth.csv`
 - Test configuration in `pytest.ini` with custom markers
 - Sample images and expected outputs in `data/sample/`
+
+## Git Commit Guidelines
+
+- Do NOT add Claude Code or yourself as a co-author in commit messages
+- Keep commit messages focused and descriptive
+- Use conventional commit format when appropriate
+
+## Cleanup Guidelines
+
+- Delete analysis output results after testing/development
+- Do not commit temporary analysis files or large datasets
+- Clean up `coffee_analysis_*` directories after validation
