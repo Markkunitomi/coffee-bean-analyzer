@@ -5,9 +5,9 @@ Handles loading and validation of configuration files with defaults.
 
 import importlib.resources
 import logging
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import yaml
 
@@ -100,7 +100,7 @@ class OutputConfig:
     report_format: str = "detailed"  # "detailed", "summary", "minimal"
 
     # Visualization
-    annotation_color: tuple = (0, 255, 0)  # Green in BGR
+    annotation_color: List[int] = field(default_factory=lambda: [0, 255, 0])  # Green in BGR
     annotation_thickness: int = 2
     show_measurements: bool = True
     show_confidence: bool = False
