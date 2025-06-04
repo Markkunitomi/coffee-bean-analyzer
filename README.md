@@ -1,6 +1,6 @@
 # Coffee Bean Analyzer
 
-A comprehensive computer vision system for analyzing coffee beans from images. Features automated detection, measurement, and quality assessment with coin-based scaling and parameter optimization.
+A detailed computer vision system for analyzing coffee beans from images. Features automated detection, measurement, and quality assessment with coin-based scaling and parameter optimization.
 
 ## 🌟 Features
 
@@ -8,7 +8,7 @@ A comprehensive computer vision system for analyzing coffee beans from images. F
 - **Bean Segmentation** - Advanced image processing to identify individual beans
 - **Morphological Analysis** - Length, width, area, aspect ratio, and other measurements
 - **Parameter Optimization** - Automatically tunes detection parameters using ground truth
-- **Comprehensive Reporting** - Detailed analysis reports with visualizations
+- **Detailed Reporting** - Detailed analysis reports with visualizations
 - **Batch Processing** - Process multiple images automatically
 - **Modular Architecture** - Clean, extensible codebase with pluggable components
 
@@ -54,13 +54,13 @@ python analyze_beans.py image.tif --preset aggressive
 ### Programmatic Usage
 
 ```python
-from comprehensive_analyzer import ComprehensiveCoffeeBeanAnalyzer
+from analyzer import CoffeeBeanAnalyzer
 
 # Initialize analyzer
-analyzer = ComprehensiveCoffeeBeanAnalyzer()
+analyzer = CoffeeBeanAnalyzer()
 
-# Run comprehensive analysis
-results = analyzer.analyze_image_comprehensive(
+# Run detailed analysis
+results = analyzer.analyze_image_detailed(
     "path/to/image.tif",
     ground_truth_path="ground_truth.csv"
 )
@@ -77,7 +77,7 @@ coffee-bean-analyzer/
 ├── requirements.txt
 ├── pyproject.toml
 ├── analyze_beans.py              # Main CLI script
-├── comprehensive_analyzer.py     # High-level analyzer class
+├── analyzer.py               # High-level analyzer class
 ├── coffee_bean_analyzer/         # Core modular components
 │   ├── __init__.py
 │   ├── core/
@@ -91,7 +91,7 @@ coffee-bean-analyzer/
 │       ├── visualization.py     # Plotting utilities
 │       └── io_utils.py          # File I/O helpers
 ├── tests/                       # Test suite
-│   ├── test_comprehensive_analyzer.py
+│   ├── test_analyzer.py
 │   ├── test_components.py
 │   └── data/                    # Test images and ground truth
 └── docs/                        # Documentation
@@ -121,13 +121,13 @@ custom_config = {
     'max_area': 5000
 }
 
-analyzer = ComprehensiveCoffeeBeanAnalyzer()
+analyzer = CoffeeBeanAnalyzer()
 analyzer.segmentor.update_configuration(custom_config)
 ```
 
 ## 📊 Output Structure
 
-Each analysis generates a comprehensive output directory:
+Each analysis generates a detailed output directory:
 
 ```
 coffee_analysis_YYYYMMDD_HHMMSS/
@@ -137,7 +137,7 @@ coffee_analysis_YYYYMMDD_HHMMSS/
 │   ├── ground_truth_comparison.csv
 │   └── optimized_parameters.json
 ├── images/
-│   ├── *_analysis.png           # Comprehensive visualizations
+│   ├── *_analysis.png           # Detailed visualizations
 │   ├── *_annotated.png          # Annotated detection results
 │   ├── *_binary_segmentation.png
 │   └── optimization_comparison.png

@@ -13,8 +13,8 @@ class VisualizationGenerator:
         image_name: str,
         is_optimized: bool = False,
     ):
-        """Create comprehensive analysis visualization."""
-        # Implementation here - moved from comprehensive_analyzer
+        """Create detailed analysis visualization."""
+        # Implementation here - moved from detailed_analyzer
         pass
 
     def create_optimization_comparison(

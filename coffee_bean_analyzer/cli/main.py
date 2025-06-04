@@ -99,9 +99,9 @@ def cli(ctx, verbose: bool, quiet: bool, log_file: Optional[str]):
     help="Run parameter optimization (auto-enabled if ground truth provided)",
 )
 @click.option(
-    "--comprehensive-report/--no-comprehensive-report",
+    "--detailed-report/--no-detailed-report",
     default=True,
-    help="Generate comprehensive analysis report with visualizations",
+    help="Generate detailed analysis report with visualizations",
 )
 @click.pass_context
 def analyze(
@@ -138,7 +138,7 @@ def analyze(
             # ADD THESE NEW PARAMETERS:
             ground_truth_path=ground_truth,
             run_optimization=optimize,
-            save_comprehensive_report=comprehensive_report,
+            save_detailed_report=detailed_report,
         )
         click.echo(f"✅ Analysis complete. Results saved to {output_dir}")
     except Exception as e:
@@ -203,7 +203,7 @@ def batch(
     INPUT_DIR: Directory containing images to process
 
     This command processes all images in a directory, generating
-    comprehensive reports and measurements for each image.
+    detailed reports and measurements for each image.
 
     Examples:
         coffee-bean-analyzer batch images/

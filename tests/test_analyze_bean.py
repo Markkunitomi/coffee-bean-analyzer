@@ -75,13 +75,13 @@ class TestAnalyzeBeansScript:
             assert args.output_dir == "output"
             assert args.verbose is True
 
-    @patch("analyze_beans.ComprehensiveCoffeeBeanAnalyzer")
+    @patch("analyze_beans.CoffeeBeanAnalyzer")
     def test_main_basic_analysis(self, mock_analyzer_class, sample_image_path):
         """Test main function with basic analysis."""
         # Setup mock
         mock_analyzer = Mock()
         mock_analyzer_class.return_value = mock_analyzer
-        mock_analyzer.analyze_image_comprehensive.return_value = {
+        mock_analyzer.analyze_image.return_value = {
             "original": {"measurements": []},
             "optimized": None,
             "coin_detection": None,
@@ -93,14 +93,14 @@ class TestAnalyzeBeansScript:
 
         # Verify calls
         mock_analyzer_class.assert_called_once()
-        mock_analyzer.analyze_image_comprehensive.assert_called_once_with(
+        mock_analyzer.analyze_image.assert_called_once_with(
             sample_image_path,
             ground_truth_path=None,
             config_preset="default",
             run_optimization=False,
         )
 
-    @patch("analyze_beans.ComprehensiveCoffeeBeanAnalyzer")
+    @patch("analyze_beans.CoffeeBeanAnalyzer")
     def test_main_with_optimization(
         self, mock_analyzer_class, sample_image_path, sample_ground_truth_path
     ):
@@ -108,7 +108,7 @@ class TestAnalyzeBeansScript:
         # Setup mock
         mock_analyzer = Mock()
         mock_analyzer_class.return_value = mock_analyzer
-        mock_analyzer.analyze_image_comprehensive.return_value = {
+        mock_analyzer.analyze_image.return_value = {
             "original": {"measurements": []},
             "optimized": {"measurements": []},
             "coin_detection": None,
@@ -128,14 +128,14 @@ class TestAnalyzeBeansScript:
             analyze_beans.main()
 
         # Verify optimization was requested
-        mock_analyzer.analyze_image_comprehensive.assert_called_once_with(
+        mock_analyzer.analyze_image.assert_called_once_with(
             sample_image_path,
             ground_truth_path=sample_ground_truth_path,
             config_preset="default",
             run_optimization=True,
         )
 
-    @patch("analyze_beans.ComprehensiveCoffeeBeanAnalyzer")
+    @patch("analyze_beans.CoffeeBeanAnalyzer")
     def test_main_with_custom_output_dir(
         self, mock_analyzer_class, sample_image_path, tmp_path
     ):
@@ -145,7 +145,7 @@ class TestAnalyzeBeansScript:
         # Setup mock
         mock_analyzer = Mock()
         mock_analyzer_class.return_value = mock_analyzer
-        mock_analyzer.analyze_image_comprehensive.return_value = {
+        mock_analyzer.analyze_image.return_value = {
             "original": {"measurements": []},
             "optimized": None,
             "coin_detection": None,
@@ -161,13 +161,13 @@ class TestAnalyzeBeansScript:
         # Verify output directory was passed
         mock_analyzer_class.assert_called_once_with(output_base_dir=output_dir)
 
-    @patch("analyze_beans.ComprehensiveCoffeeBeanAnalyzer")
+    @patch("analyze_beans.CoffeeBeanAnalyzer")
     def test_main_invalid_image(self, mock_analyzer_class):
         """Test main function with invalid image path."""
         # Setup mock to raise exception
         mock_analyzer = Mock()
         mock_analyzer_class.return_value = mock_analyzer
-        mock_analyzer.analyze_image_comprehensive.side_effect = ValueError(
+        mock_analyzer.analyze_image.side_effect = ValueError(
             "Could not load image"
         )
 
@@ -176,13 +176,13 @@ class TestAnalyzeBeansScript:
             with pytest.raises(SystemExit):
                 analyze_beans.main()
 
-    @patch("analyze_beans.ComprehensiveCoffeeBeanAnalyzer")
+    @patch("analyze_beans.CoffeeBeanAnalyzer")
     def test_main_different_presets(self, mock_analyzer_class, sample_image_path):
         """Test main function with different presets."""
         # Setup mock
         mock_analyzer = Mock()
         mock_analyzer_class.return_value = mock_analyzer
-        mock_analyzer.analyze_image_comprehensive.return_value = {
+        mock_analyzer.analyze_image.return_value = {
             "original": {"measurements": []},
             "optimized": None,
             "coin_detection": None,
@@ -196,14 +196,14 @@ class TestAnalyzeBeansScript:
                 analyze_beans.main()
 
             # Verify preset was passed
-            mock_analyzer.analyze_image_comprehensive.assert_called_with(
+            mock_analyzer.analyze_image.assert_called_with(
                 sample_image_path,
                 ground_truth_path=None,
                 config_preset=preset,
                 run_optimization=False,
             )
 
-    @patch("analyze_beans.ComprehensiveCoffeeBeanAnalyzer")
+    @patch("analyze_beans.CoffeeBeanAnalyzer")
     def test_main_verbose_output(
         self, mock_analyzer_class, sample_image_path, sample_ground_truth_path, capsys
     ):
@@ -212,7 +212,7 @@ class TestAnalyzeBeansScript:
         mock_analyzer = Mock()
         mock_analyzer_class.return_value = mock_analyzer
         mock_analyzer.output_dir = Path("/fake/output")
-        mock_analyzer.analyze_image_comprehensive.return_value = {
+        mock_analyzer.analyze_image.return_value = {
             "original": {"measurements": [Mock(), Mock()]},
             "optimized": {"measurements": [Mock(), Mock(), Mock()]},
             "coin_detection": Mock(pixels_per_mm=4.0),

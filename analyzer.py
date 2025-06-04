@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fixed Comprehensive Coffee Bean Analyzer
+"""Coffee Bean Analyzer
 Handles different attribute names safely for measurement objects
 """
 
@@ -23,7 +23,7 @@ from coffee_bean_analyzer.core.preprocessor import create_preprocessor
 from coffee_bean_analyzer.core.segmentor import create_segmentor
 
 
-class ComprehensiveCoffeeBeanAnalyzer:
+class CoffeeBeanAnalyzer:
     """Full-featured coffee bean analyzer with safe attribute access"""
 
     def __init__(self, output_base_dir=None):
@@ -422,7 +422,7 @@ class ComprehensiveCoffeeBeanAnalyzer:
 
         plt.tight_layout()
 
-        # Save the comprehensive visualization
+        # Save the detailed visualization
         suffix = "_optimized" if is_optimized else "_original"
         filename = f"{image_name}{suffix}_analysis.png"
         plt.savefig(self.images_dir / filename, dpi=300, bbox_inches="tight")
@@ -663,17 +663,17 @@ class ComprehensiveCoffeeBeanAnalyzer:
 
         return comparison_file
 
-    def analyze_image_comprehensive(
+    def analyze_image(
         self,
         image_path,
         ground_truth_path=None,
         config_preset="default",
         run_optimization=None,
     ):
-        """Run comprehensive analysis matching your original script's functionality."""
+        """Run detailed analysis matching your original script's functionality."""
         image_name = Path(image_path).stem
         print(f"\n{'=' * 80}")
-        print(f"🔬 COMPREHENSIVE ANALYSIS: {image_name}")
+        print(f"🔬 DETAILED ANALYSIS: {image_name}")
         print(f"{'=' * 80}")
 
         # Load image
@@ -1290,7 +1290,7 @@ class ComprehensiveCoffeeBeanAnalyzer:
         """Run the complete analysis pipeline on all found images.
         This recreates your original script's full functionality!
         """
-        print("☕ COMPREHENSIVE COFFEE BEAN ANALYSIS")
+        print("☕ DETAILED COFFEE BEAN ANALYSIS")
         print("=" * 60)
 
         # Find images
@@ -1323,7 +1323,7 @@ class ComprehensiveCoffeeBeanAnalyzer:
             )
 
         # Process each image
-        print("\n🚀 Starting comprehensive analysis...")
+        print("\n🚀 Starting detailed analysis...")
 
         for i, image_path in enumerate(image_files, 1):
             print("\n" + "🔄" * 20)
@@ -1331,7 +1331,7 @@ class ComprehensiveCoffeeBeanAnalyzer:
             print("🔄" * 20)
 
             try:
-                results = self.analyze_image_comprehensive(
+                results = self.analyze_image(
                     image_path,
                     ground_truth_path,
                     config_preset=config_preset,
@@ -1376,7 +1376,7 @@ class ComprehensiveCoffeeBeanAnalyzer:
 
 
 def main():
-    """Main function - recreates your original script's comprehensive analysis
+    """Main function - recreates your original script's detailed analysis
     with the new modular system underneath!
     """
     # You can customize these settings
@@ -1385,8 +1385,8 @@ def main():
     )
     search_directories = ["tests/data", "data", "."]  # Where to look for images
 
-    # Create the comprehensive analyzer
-    analyzer = ComprehensiveCoffeeBeanAnalyzer()
+    # Create the detailed analyzer
+    analyzer = CoffeeBeanAnalyzer()
 
     # Run the full analysis pipeline
     try:

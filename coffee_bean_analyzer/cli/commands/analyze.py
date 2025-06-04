@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Enhanced analyze command that integrates comprehensive analysis features
+"""Enhanced analyze command that integrates detailed analysis features
 This should update: coffee_bean_analyzer/cli/commands/analyze.py
 """
 
@@ -37,9 +37,9 @@ def analyze_command(
     verbose: bool = False,
     ground_truth_path: Optional[Path] = None,
     run_optimization: Optional[bool] = None,
-    save_comprehensive_report: bool = True,
+    save_detailed_report: bool = True,
 ):
-    """Enhanced analyze command with comprehensive analysis features.
+    """Enhanced analyze command with detailed analysis features.
 
     Args:
         input_path: Path to input image
@@ -51,7 +51,7 @@ def analyze_command(
         verbose: Verbose logging
         ground_truth_path: Optional ground truth for optimization
         run_optimization: Force optimization on/off
-        save_comprehensive_report: Generate comprehensive analysis report
+        save_detailed_report: Generate detailed analysis report
     """
     logger.info(f"Starting analysis of {input_path}")
 
@@ -211,8 +211,8 @@ def analyze_command(
             output_dir=data_handler.images_dir / "individual_beans" / image_name,
         )
 
-    # Generate comprehensive report if requested
-    if save_comprehensive_report:
+    # Generate detailed report if requested
+    if save_detailed_report:
         report_path = generate_analysis_report(
             image_name=image_name,
             original_results=original_results,
@@ -261,7 +261,7 @@ def get_bbox_from_mask(mask: np.ndarray) -> tuple:
     return (x1, y1, x2, y2)
 
 
-# Also update the CLI main.py to add comprehensive analysis options:
+# Also update the CLI main.py to add detailed analysis options:
 """
 Update the analyze command in main.py to include:
 
@@ -269,11 +269,11 @@ Update the analyze command in main.py to include:
               help='Ground truth CSV for optimization')
 @click.option('--optimize/--no-optimize', default=None,
               help='Run parameter optimization')
-@click.option('--comprehensive-report/--no-comprehensive-report', default=True,
-              help='Generate comprehensive analysis report')
+@click.option('--detailed-report/--no-detailed-report', default=True,
+              help='Generate detailed analysis report')
 
 And pass these to analyze_command:
     ground_truth_path=ground_truth,
     run_optimization=optimize,
-    save_comprehensive_report=comprehensive_report
+    save_detailed_report=detailed_report
 """

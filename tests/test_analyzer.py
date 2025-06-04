@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Unit tests for the comprehensive analyzer module using pytest."""
+"""Unit tests for the analyzer module using pytest."""
 
 import sys
 from pathlib import Path
@@ -17,16 +17,16 @@ from coffee_bean_analyzer.core.detector import DetectionResult
 from coffee_bean_analyzer.core.measurer import BeanMeasurement, MeasurementResult
 from coffee_bean_analyzer.core.optimizer import OptimizationResult
 from coffee_bean_analyzer.core.segmentor import SegmentationResult
-from comprehensive_analyzer import ComprehensiveCoffeeBeanAnalyzer
+from analyzer import CoffeeBeanAnalyzer
 
 
-class TestComprehensiveCoffeeBeanAnalyzer:
-    """Test suite for ComprehensiveCoffeeBeanAnalyzer class."""
+class TestCoffeeBeanAnalyzer:
+    """Test suite for CoffeeBeanAnalyzer class."""
 
     @pytest.fixture
     def analyzer(self, tmp_path):
         """Create analyzer instance with temporary directory."""
-        return ComprehensiveCoffeeBeanAnalyzer(
+        return CoffeeBeanAnalyzer(
             output_base_dir=str(tmp_path / "test_output")
         )
 
@@ -82,7 +82,7 @@ class TestComprehensiveCoffeeBeanAnalyzer:
 
     def test_initialization(self, tmp_path):
         """Test analyzer initialization."""
-        analyzer = ComprehensiveCoffeeBeanAnalyzer(output_base_dir=str(tmp_path))
+        analyzer = CoffeeBeanAnalyzer(output_base_dir=str(tmp_path))
 
         assert analyzer.output_dir.exists()
         assert analyzer.data_dir.exists()
@@ -286,7 +286,7 @@ class TestComprehensiveCoffeeBeanAnalyzer:
             assert "COFFEE BEAN ANALYSIS SUMMARY" in content
             assert "test_image" in content
 
-    @patch.object(ComprehensiveCoffeeBeanAnalyzer, "analyze_image_comprehensive")
+    @patch.object(CoffeeBeanAnalyzer, "analyze_image")
     def test_run_full_analysis(self, mock_analyze, analyzer, tmp_path):
         """Test full analysis pipeline."""
         # Create test image
@@ -313,7 +313,7 @@ class TestComprehensiveCoffeeBeanAnalyzer:
     @patch("coffee_bean_analyzer.core.detector.CoinDetector.detect")
     @patch("coffee_bean_analyzer.core.segmentor.BeanSegmentor.segment")
     @patch("coffee_bean_analyzer.core.measurer.BeanMeasurer.measure")
-    def test_analyze_image_comprehensive_no_optimization(
+    def test_analyze_image_no_optimization(
         self,
         mock_measure,
         mock_segment,
@@ -323,7 +323,7 @@ class TestComprehensiveCoffeeBeanAnalyzer:
         sample_image,
         sample_measurements,
     ):
-        """Test comprehensive analysis without optimization."""
+        """Test detailed analysis without optimization."""
         # Setup mocks
         mock_imread.return_value = sample_image
         mock_detect.return_value = []  # No coin detected
@@ -350,7 +350,7 @@ class TestComprehensiveCoffeeBeanAnalyzer:
         mock_measure.return_value = mock_measure_result
 
         # Run analysis
-        result = analyzer.analyze_image_comprehensive(
+        result = analyzer.analyze_image(
             "test.jpg", ground_truth_path=None, run_optimization=False
         )
 
@@ -384,7 +384,7 @@ class TestComprehensiveCoffeeBeanAnalyzer:
 
 
 class TestIntegration:
-    """Integration tests for the comprehensive analyzer."""
+    """Integration tests for the analyzer."""
 
     @pytest.mark.integration
     def test_full_pipeline_with_real_image(self, tmp_path):
@@ -414,7 +414,7 @@ class TestIntegration:
         ground_truth.to_csv(gt_path, index=False)
 
         # Run analysis
-        analyzer = ComprehensiveCoffeeBeanAnalyzer(
+        analyzer = CoffeeBeanAnalyzer(
             output_base_dir=str(tmp_path / "output")
         )
 

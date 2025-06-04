@@ -253,7 +253,7 @@ class BeanMeasurer:
     """Main bean measurement class for extracting physical properties.
 
     Adapted from your original measure_beans() function with added modularity
-    and comprehensive measurement capabilities.
+    and detailed measurement capabilities.
     """
 
     def __init__(self, config: Dict[str, Any]):
@@ -282,7 +282,7 @@ class BeanMeasurer:
     def calculate_measurements(
         self, region_props: List, scale_factor: float, unit: str
     ) -> List[BeanMeasurement]:
-        """Calculate comprehensive measurements for each bean region.
+        """Calculate detailed measurements for each bean region.
 
         This implements your original measurement calculations.
         """

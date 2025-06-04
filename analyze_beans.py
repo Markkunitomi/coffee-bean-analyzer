@@ -14,17 +14,17 @@ import glob
 import sys
 from pathlib import Path
 
-# Import your comprehensive analyzer
+# Import the analyzer
 try:
-    from comprehensive_analyzer import ComprehensiveCoffeeBeanAnalyzer
+    from analyzer import CoffeeBeanAnalyzer
 except ImportError:
-    print("❌ Error: Could not import ComprehensiveCoffeeBeanAnalyzer")
-    print("💡 Make sure comprehensive_analyzer.py is in the same directory")
+    print("❌ Error: Could not import CoffeeBeanAnalyzer")
+    print("💡 Make sure analyzer.py is in the same directory")
     sys.exit(1)
 
 
 def parse_args():
-    """Parse command line arguments with comprehensive options."""
+    """Parse command line arguments with detailed options."""
     parser = argparse.ArgumentParser(
         description="Coffee Bean Analysis System",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -230,7 +230,7 @@ def validate_files(image_files, ground_truth_file=None):
 
 def create_custom_analyzer(args):
     """Create analyzer with custom parameters from command line."""
-    analyzer = ComprehensiveCoffeeBeanAnalyzer(output_base_dir=args.output_dir)
+    analyzer = CoffeeBeanAnalyzer(output_base_dir=args.output_dir)
 
     # Update coin detector configuration
     coin_config = {}
@@ -364,7 +364,7 @@ def main():
         print("\n🚀 Initializing analyzer...")
 
     try:
-        analyzer = ComprehensiveCoffeeBeanAnalyzer(output_base_dir=args.output_dir)
+        analyzer = CoffeeBeanAnalyzer(output_base_dir=args.output_dir)
 
     except Exception as e:
         print(f"❌ Error initializing analyzer: {e}")
@@ -395,7 +395,7 @@ def main():
 
         try:
             # Run analysis
-            results = analyzer.analyze_image_comprehensive(
+            results = analyzer.analyze_image(
                 image_path,
                 ground_truth_path=ground_truth_file,
                 config_preset=args.preset,

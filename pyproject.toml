@@ -134,7 +134,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["coffee_bean_analyzer", "comprehensive_analyzer"]
+source = ["coffee_bean_analyzer", "analyzer"]
 omit = ["*/tests/*", "*/test_*"]
 
 [tool.coverage.report]

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Coffee Bean Analyzer is a computer vision system for automated coffee bean analysis from images. It uses coin-based scaling for real-world measurements and provides comprehensive morphological analysis with parameter optimization capabilities.
+Coffee Bean Analyzer is a computer vision system for automated coffee bean analysis from images. It uses coin-based scaling for real-world measurements and provides detailed morphological analysis with parameter optimization capabilities.
 
 ## Architecture
 
@@ -18,7 +18,7 @@ The system follows a modular 5-stage processing pipeline:
 
 ### Key Components
 
-- **`comprehensive_analyzer.py`** - Main analyzer class combining all components
+- **`analyzer.py`** - Main analyzer class combining all components
 - **`analyze_beans.py`** - Legacy script interface for simple usage
 - **`cli/main.py`** - Full CLI with batch processing and configuration presets
 - **`config/config_loader.py`** - YAML configuration management
