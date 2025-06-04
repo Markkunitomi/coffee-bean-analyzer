@@ -1,4 +1,4 @@
-"""Coffee Bean Analyzer - Bean Segmentation Module
+"""Coffee Bean Analyzer - Bean Segmentation Module.
 
 Adapted from the original coffee_bean_analyzer.py script.
 Handles segmentation of individual coffee beans using watershed algorithm.
@@ -21,7 +21,7 @@ from .preprocessor import ImagePreprocessor
 
 @dataclass
 class SegmentationResult:
-    """Container for segmentation results"""
+    """Container for segmentation results."""
 
     labels: np.ndarray
     binary_mask: np.ndarray
@@ -82,9 +82,7 @@ class MorphologicalProcessor:
 
         # Remove noise and fill holes (your original logic)
         cleaned = self.apply_closing(binary_image, kernel_size, close_iterations)
-        cleaned = self.apply_opening(cleaned, kernel_size, open_iterations)
-
-        return cleaned
+        return self.apply_opening(cleaned, kernel_size, open_iterations)
 
 
 class WatershedSegmentor:
@@ -108,13 +106,11 @@ class WatershedSegmentor:
         threshold_factor = self.config.get("threshold_factor", 0.3)
 
         # Find local maxima (your original code)
-        local_maxima = peak_local_max(
+        return peak_local_max(
             distance_transform,
             min_distance=min_distance,
             threshold_abs=threshold_factor * distance_transform.max(),
         )
-
-        return local_maxima
 
     def create_markers(
         self, local_maxima: np.ndarray, image_shape: Tuple[int, int]
@@ -130,8 +126,7 @@ class WatershedSegmentor:
     ) -> np.ndarray:
         """Apply watershed segmentation algorithm."""
         # Apply watershed (your original implementation)
-        labels = segmentation.watershed(-distance_transform, markers, mask=mask)
-        return labels
+        return segmentation.watershed(-distance_transform, markers, mask=mask)
 
 
 class CoinExcluder:

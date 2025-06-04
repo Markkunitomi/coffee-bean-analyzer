@@ -164,7 +164,7 @@ class TestCountAccuracyScorer:
         )
 
         # Count accuracy should be reduced
-        expected_count_accuracy = 1.0 - abs(2 - 3) / 3  # 0.667
+        1.0 - abs(2 - 3) / 3  # 0.667
         assert score > 0.0
         assert score < 1.0
 

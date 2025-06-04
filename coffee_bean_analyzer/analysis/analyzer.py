@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Coffee Bean Analyzer - Analysis Module
-This belongs in: coffee_bean_analyzer/analysis/analyzer.py
+This belongs in: coffee_bean_analyzer/analysis/analyzer.py.
 """
 
 from pathlib import Path

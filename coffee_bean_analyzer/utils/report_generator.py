@@ -56,33 +56,42 @@ def generate_analysis_report(
     ]
 
     if coin_detection:
-        report_lines.extend([
-            f"  Center: ({coin_detection.center[0]:.1f}, {coin_detection.center[1]:.1f})",
-            f"  Radius: {coin_detection.radius:.1f}px",
-            f"  Pixels per mm: {coin_detection.pixels_per_mm:.2f}" if hasattr(coin_detection, 'pixels_per_mm') and coin_detection.pixels_per_mm else "  Pixels per mm: Not available",
-        ])
+        report_lines.extend(
+            [
+                f"  Center: ({coin_detection.center[0]:.1f}, {coin_detection.center[1]:.1f})",
+                f"  Radius: {coin_detection.radius:.1f}px",
+                f"  Pixels per mm: {coin_detection.pixels_per_mm:.2f}"
+                if hasattr(coin_detection, "pixels_per_mm")
+                and coin_detection.pixels_per_mm
+                else "  Pixels per mm: Not available",
+            ]
+        )
 
     # Add original results
-    if original_results and 'measurements' in original_results:
-        measurements = original_results['measurements']
-        report_lines.extend([
-            "",
-            "Original Analysis:",
-            f"  Bean count: {len(measurements)}",
-        ])
+    if original_results and "measurements" in original_results:
+        measurements = original_results["measurements"]
+        report_lines.extend(
+            [
+                "",
+                "Original Analysis:",
+                f"  Bean count: {len(measurements)}",
+            ]
+        )
 
     # Add optimized results if available
-    if optimized_results and 'measurements' in optimized_results:
-        opt_measurements = optimized_results['measurements']
-        report_lines.extend([
-            "",
-            "Optimized Analysis:",
-            f"  Bean count: {len(opt_measurements)}",
-        ])
+    if optimized_results and "measurements" in optimized_results:
+        opt_measurements = optimized_results["measurements"]
+        report_lines.extend(
+            [
+                "",
+                "Optimized Analysis:",
+                f"  Bean count: {len(opt_measurements)}",
+            ]
+        )
 
     # Write report
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(output_path, 'w') as f:
-        f.write('\n'.join(report_lines))
+    with open(output_path, "w") as f:
+        f.write("\n".join(report_lines))
 
     return output_path

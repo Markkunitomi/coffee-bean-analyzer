@@ -1,4 +1,4 @@
-"""Coffee Bean Analyzer - Image Preprocessing Module
+"""Coffee Bean Analyzer - Image Preprocessing Module.
 
 Adapted from the original coffee_bean_analyzer.py script.
 Handles image preprocessing operations for coffee bean segmentation.
@@ -15,7 +15,7 @@ import numpy as np
 
 @dataclass
 class PreprocessingResult:
-    """Container for preprocessing results"""
+    """Container for preprocessing results."""
 
     processed_image: np.ndarray
     original_shape: tuple

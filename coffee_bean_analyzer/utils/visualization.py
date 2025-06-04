@@ -52,18 +52,32 @@ def create_analysis_visualization(
         center = (int(coin_detection.center[0]), int(coin_detection.center[1]))
         radius = int(coin_detection.radius)
         cv2.circle(annotated, center, radius, (0, 255, 255), 3)  # Yellow circle
-        cv2.putText(annotated, "COIN", (center[0] - 20, center[1] - radius - 10),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
+        cv2.putText(
+            annotated,
+            "COIN",
+            (center[0] - 20, center[1] - radius - 10),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.7,
+            (0, 255, 255),
+            2,
+        )
 
     # Draw bean measurements
     for i, measurement in enumerate(measurements):
-        if hasattr(measurement, 'centroid'):
+        if hasattr(measurement, "centroid"):
             center = (int(measurement.centroid[0]), int(measurement.centroid[1]))
             # Draw centroid
             cv2.circle(annotated, center, 3, (0, 255, 0), -1)  # Green dot
             # Draw bean number
-            cv2.putText(annotated, str(i + 1), (center[0] + 5, center[1] - 5),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+            cv2.putText(
+                annotated,
+                str(i + 1),
+                (center[0] + 5, center[1] - 5),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.5,
+                (0, 255, 0),
+                1,
+            )
 
     # Save the annotated image
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -94,9 +108,9 @@ def create_optimization_comparison(
     ]
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(output_path.with_suffix('.txt'), 'w') as f:
-        f.write('\n'.join(comparison_text))
+    with open(output_path.with_suffix(".txt"), "w") as f:
+        f.write("\n".join(comparison_text))
 
     # For now, just return the text file path
     # In a real implementation, this would generate an actual image comparison
-    return output_path.with_suffix('.txt')
+    return output_path.with_suffix(".txt")

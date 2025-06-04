@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Enhanced analyze command that integrates detailed analysis features
-This should update: coffee_bean_analyzer/cli/commands/analyze.py
+This should update: coffee_bean_analyzer/cli/commands/analyze.py.
 """
 
 import logging
@@ -83,9 +83,7 @@ def analyze_command(
 
     # Initialize components
     coin_detector = CoinDetector(config.get("coin_detector", {}))
-    preprocessor = create_preprocessor(
-        config.get("preprocessing", {}).get("preset", "default")
-    )
+    create_preprocessor(config.get("preprocessing", {}).get("preset", "default"))
     segmentor = create_segmentor(
         config.get("segmentation", {}).get("preset", "default")
     )

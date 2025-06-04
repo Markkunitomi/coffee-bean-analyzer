@@ -48,9 +48,7 @@ class TestDetectionConfig:
     def test_custom_values(self):
         """Test creating config with custom values."""
         config = DetectionConfig(
-            coin_hough_dp=2.0,
-            bean_min_area=1000,
-            bean_max_aspect_ratio=2.5
+            coin_hough_dp=2.0, bean_min_area=1000, bean_max_aspect_ratio=2.5
         )
 
         assert config.coin_hough_dp == 2.0
@@ -78,10 +76,7 @@ class TestSegmentationConfig:
 
     def test_custom_values(self):
         """Test creating config with custom values."""
-        config = SegmentationConfig(
-            gaussian_blur_kernel=7,
-            fill_holes=False
-        )
+        config = SegmentationConfig(gaussian_blur_kernel=7, fill_holes=False)
 
         assert config.gaussian_blur_kernel == 7
         assert config.fill_holes is False
@@ -106,9 +101,7 @@ class TestMeasurementConfig:
     def test_custom_values(self):
         """Test creating config with custom values."""
         config = MeasurementConfig(
-            quarter_diameter_mm=24.0,
-            measurement_precision=3,
-            min_length_mm=2.5
+            quarter_diameter_mm=24.0, measurement_precision=3, min_length_mm=2.5
         )
 
         assert config.quarter_diameter_mm == 24.0
@@ -133,9 +126,7 @@ class TestOptimizationConfig:
     def test_custom_values(self):
         """Test creating config with custom values."""
         config = OptimizationConfig(
-            n_trials=50,
-            timeout_seconds=300,
-            primary_metric="f1_score"
+            n_trials=50, timeout_seconds=300, primary_metric="f1_score"
         )
 
         assert config.n_trials == 50
@@ -166,7 +157,7 @@ class TestOutputConfig:
         config = OutputConfig(
             save_individual_beans=True,
             annotation_color=(255, 0, 0),
-            report_format="summary"
+            report_format="summary",
         )
 
         assert config.save_individual_beans is True
@@ -184,7 +175,7 @@ class TestAppConfig:
             segmentation=SegmentationConfig(),
             measurement=MeasurementConfig(),
             optimization=OptimizationConfig(),
-            output=OutputConfig()
+            output=OutputConfig(),
         )
 
         assert isinstance(config.detection, DetectionConfig)
@@ -206,7 +197,7 @@ class TestAppConfig:
             measurement=MeasurementConfig(),
             optimization=OptimizationConfig(),
             output=OutputConfig(),
-            log_level="DEBUG"
+            log_level="DEBUG",
         )
 
         assert config.detection.coin_hough_dp == 2.0
@@ -217,7 +208,7 @@ class TestAppConfig:
 class TestLoadDefaultConfig:
     """Test load_default_config function."""
 
-    @patch('importlib.resources.open_text')
+    @patch("importlib.resources.open_text")
     def test_load_from_package_resources(self, mock_open_text):
         """Test loading default config from package resources."""
         mock_yaml_content = """
@@ -237,7 +228,7 @@ class TestLoadDefaultConfig:
         assert "detection" in config_data
         mock_open_text.assert_called_once()
 
-    @patch('importlib.resources.open_text', side_effect=FileNotFoundError)
+    @patch("importlib.resources.open_text", side_effect=FileNotFoundError)
     def test_fallback_to_hardcoded_defaults(self, mock_open_text):
         """Test fallback to hardcoded defaults when package resource fails."""
         config_data = load_default_config()
@@ -275,19 +266,12 @@ class TestLoadConfig:
     def test_load_config_with_valid_file(self, tmp_path):
         """Test loading config from valid YAML file."""
         config_data = {
-            "detection": {
-                "coin_detection": {
-                    "dp": 1.5,
-                    "min_dist": 120
-                }
-            },
-            "measurement": {
-                "quarter_diameter_mm": 24.0
-            }
+            "detection": {"coin_detection": {"dp": 1.5, "min_dist": 120}},
+            "measurement": {"quarter_diameter_mm": 24.0},
         }
 
         config_file = tmp_path / "test_config.yaml"
-        with open(config_file, 'w') as f:
+        with open(config_file, "w") as f:
             yaml.dump(config_data, f)
 
         config = load_config(config_file)
@@ -300,7 +284,7 @@ class TestLoadConfig:
     def test_load_config_with_invalid_yaml(self, tmp_path):
         """Test loading config from invalid YAML file (should use defaults)."""
         config_file = tmp_path / "invalid_config.yaml"
-        with open(config_file, 'w') as f:
+        with open(config_file, "w") as f:
             f.write("invalid: yaml: content: [")  # Invalid YAML
 
         config = load_config(config_file)
@@ -327,15 +311,10 @@ class TestDeepMerge:
         base = {
             "detection": {
                 "coin": {"dp": 1.0, "min_dist": 100},
-                "bean": {"min_area": 500}
+                "bean": {"min_area": 500},
             }
         }
-        override = {
-            "detection": {
-                "coin": {"dp": 1.5},
-                "new_section": {"value": 42}
-            }
-        }
+        override = {"detection": {"coin": {"dp": 1.5}, "new_section": {"value": 42}}}
 
         result = deep_merge(base, override)
 
@@ -343,7 +322,7 @@ class TestDeepMerge:
             "detection": {
                 "coin": {"dp": 1.5, "min_dist": 100},
                 "bean": {"min_area": 500},
-                "new_section": {"value": 42}
+                "new_section": {"value": 42},
             }
         }
 
@@ -365,15 +344,8 @@ class TestFlattenDict:
     def test_flatten_detection_config(self):
         """Test flattening detection configuration."""
         nested = {
-            "coin_detection": {
-                "dp": 1.5,
-                "min_dist": 120,
-                "param1": 60
-            },
-            "bean_detection": {
-                "min_area": 600,
-                "max_area": 6000
-            }
+            "coin_detection": {"dp": 1.5, "min_dist": 120, "param1": 60},
+            "bean_detection": {"min_area": 600, "max_area": 6000},
         }
 
         result = flatten_dict(nested, "detection")
@@ -387,14 +359,9 @@ class TestFlattenDict:
     def test_flatten_segmentation_config(self):
         """Test flattening segmentation configuration."""
         nested = {
-            "watershed": {
-                "gaussian_blur_kernel": 7,
-                "morphology_kernel": 5
-            },
-            "preprocessing": {
-                "adaptive_thresh_block_size": 13
-            },
-            "min_contour_area": 150
+            "watershed": {"gaussian_blur_kernel": 7, "morphology_kernel": 5},
+            "preprocessing": {"adaptive_thresh_block_size": 13},
+            "min_contour_area": 150,
         }
 
         result = flatten_dict(nested, "segmentation")
@@ -406,10 +373,7 @@ class TestFlattenDict:
 
     def test_flatten_other_sections(self):
         """Test flattening other sections (direct mapping)."""
-        nested = {
-            "quarter_diameter_mm": 24.0,
-            "measurement_precision": 3
-        }
+        nested = {"quarter_diameter_mm": 24.0, "measurement_precision": 3}
 
         result = flatten_dict(nested, "measurement")
 
@@ -426,7 +390,7 @@ class TestValidateConfig:
             segmentation=SegmentationConfig(),
             measurement=MeasurementConfig(),
             optimization=OptimizationConfig(),
-            output=OutputConfig()
+            output=OutputConfig(),
         )
 
         # Should not raise any exception
@@ -439,10 +403,12 @@ class TestValidateConfig:
             segmentation=SegmentationConfig(),
             measurement=MeasurementConfig(),
             optimization=OptimizationConfig(),
-            output=OutputConfig()
+            output=OutputConfig(),
         )
 
-        with pytest.raises(ValueError, match="coin_min_radius must be less than coin_max_radius"):
+        with pytest.raises(
+            ValueError, match="coin_min_radius must be less than coin_max_radius"
+        ):
             validate_config(config)
 
     def test_invalid_bean_area_range(self):
@@ -452,10 +418,12 @@ class TestValidateConfig:
             segmentation=SegmentationConfig(),
             measurement=MeasurementConfig(),
             optimization=OptimizationConfig(),
-            output=OutputConfig()
+            output=OutputConfig(),
         )
 
-        with pytest.raises(ValueError, match="bean_min_area must be less than bean_max_area"):
+        with pytest.raises(
+            ValueError, match="bean_min_area must be less than bean_max_area"
+        ):
             validate_config(config)
 
     def test_invalid_quarter_diameter(self):
@@ -465,7 +433,7 @@ class TestValidateConfig:
             segmentation=SegmentationConfig(),
             measurement=MeasurementConfig(quarter_diameter_mm=-1.0),
             optimization=OptimizationConfig(),
-            output=OutputConfig()
+            output=OutputConfig(),
         )
 
         with pytest.raises(ValueError, match="quarter_diameter_mm must be positive"):
@@ -478,10 +446,12 @@ class TestValidateConfig:
             segmentation=SegmentationConfig(),
             measurement=MeasurementConfig(min_length_mm=10.0, max_length_mm=5.0),
             optimization=OptimizationConfig(),
-            output=OutputConfig()
+            output=OutputConfig(),
         )
 
-        with pytest.raises(ValueError, match="min_length_mm must be less than max_length_mm"):
+        with pytest.raises(
+            ValueError, match="min_length_mm must be less than max_length_mm"
+        ):
             validate_config(config)
 
     def test_invalid_n_trials(self):
@@ -491,7 +461,7 @@ class TestValidateConfig:
             segmentation=SegmentationConfig(),
             measurement=MeasurementConfig(),
             optimization=OptimizationConfig(n_trials=0),
-            output=OutputConfig()
+            output=OutputConfig(),
         )
 
         with pytest.raises(ValueError, match="n_trials must be positive"):
@@ -504,10 +474,12 @@ class TestValidateConfig:
             segmentation=SegmentationConfig(),
             measurement=MeasurementConfig(),
             optimization=OptimizationConfig(validation_split=1.5),
-            output=OutputConfig()
+            output=OutputConfig(),
         )
 
-        with pytest.raises(ValueError, match="validation_split must be between 0 and 1"):
+        with pytest.raises(
+            ValueError, match="validation_split must be between 0 and 1"
+        ):
             validate_config(config)
 
 
@@ -521,7 +493,7 @@ class TestSaveConfig:
             segmentation=SegmentationConfig(gaussian_blur_kernel=7),
             measurement=MeasurementConfig(quarter_diameter_mm=24.0),
             optimization=OptimizationConfig(n_trials=50),
-            output=OutputConfig(report_format="summary")
+            output=OutputConfig(report_format="summary"),
         )
 
         output_file = tmp_path / "saved_config.yaml"
@@ -547,7 +519,7 @@ class TestSaveConfig:
             segmentation=SegmentationConfig(gaussian_blur_kernel=9),
             measurement=MeasurementConfig(measurement_precision=3),
             optimization=OptimizationConfig(n_trials=75),
-            output=OutputConfig(save_individual_beans=True)
+            output=OutputConfig(save_individual_beans=True),
         )
 
         config_file = tmp_path / "test_config.yaml"

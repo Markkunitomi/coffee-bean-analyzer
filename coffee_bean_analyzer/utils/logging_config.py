@@ -6,14 +6,14 @@ from typing import Optional
 
 def setup_logging(level: int = logging.INFO, log_file: Optional[str] = None) -> None:
     """Set up logging configuration.
-    
+
     Args:
         level: Logging level (e.g., logging.DEBUG, logging.INFO)
         log_file: Optional path to log file
     """
     # Create formatter
     formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
 
     # Set up root logger

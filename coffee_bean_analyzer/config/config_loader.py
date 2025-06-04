@@ -1,4 +1,4 @@
-"""Coffee Bean Analyzer - Configuration Management
+"""Coffee Bean Analyzer - Configuration Management.
 
 Handles loading and validation of configuration files with defaults.
 """
@@ -14,7 +14,7 @@ import yaml
 
 @dataclass
 class DetectionConfig:
-    """Configuration for detection algorithms"""
+    """Configuration for detection algorithms."""
 
     # Coin detection parameters
     coin_hough_dp: float = 1.0
@@ -34,7 +34,7 @@ class DetectionConfig:
 
 @dataclass
 class SegmentationConfig:
-    """Configuration for segmentation algorithms"""
+    """Configuration for segmentation algorithms."""
 
     # Watershed parameters
     gaussian_blur_kernel: int = 5
@@ -52,7 +52,7 @@ class SegmentationConfig:
 
 @dataclass
 class MeasurementConfig:
-    """Configuration for measurement calculations"""
+    """Configuration for measurement calculations."""
 
     # Reference measurements
     quarter_diameter_mm: float = 24.26
@@ -70,7 +70,7 @@ class MeasurementConfig:
 
 @dataclass
 class OptimizationConfig:
-    """Configuration for parameter optimization"""
+    """Configuration for parameter optimization."""
 
     # Grid search parameters
     n_trials: int = 100
@@ -87,7 +87,7 @@ class OptimizationConfig:
 
 @dataclass
 class OutputConfig:
-    """Configuration for output generation"""
+    """Configuration for output generation."""
 
     # Image outputs
     save_annotated_images: bool = True
@@ -100,7 +100,9 @@ class OutputConfig:
     report_format: str = "detailed"  # "detailed", "summary", "minimal"
 
     # Visualization
-    annotation_color: List[int] = field(default_factory=lambda: [0, 255, 0])  # Green in BGR
+    annotation_color: List[int] = field(
+        default_factory=lambda: [0, 255, 0]
+    )  # Green in BGR
     annotation_thickness: int = 2
     show_measurements: bool = True
     show_confidence: bool = False
@@ -108,7 +110,7 @@ class OutputConfig:
 
 @dataclass
 class AppConfig:
-    """Main application configuration"""
+    """Main application configuration."""
 
     detection: DetectionConfig
     segmentation: SegmentationConfig

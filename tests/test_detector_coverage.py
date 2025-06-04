@@ -47,7 +47,14 @@ class TestDetectorMissingCoverage:
 
     def test_coin_detector_no_circles_detected(self):
         """Test coin detector when no circles are detected."""
-        config = {"dp": 1, "min_dist": 100, "param1": 50, "param2": 30, "min_radius": 50, "max_radius": 150}
+        config = {
+            "dp": 1,
+            "min_dist": 100,
+            "param1": 50,
+            "param2": 30,
+            "min_radius": 50,
+            "max_radius": 150,
+        }
         detector = CoinDetector(config)
 
         # Create image with no circular objects
@@ -68,10 +75,10 @@ class TestDetectorMissingCoverage:
             "dp": 2.0,
             "min_dist": 200,  # Very high min distance
             "param1": 100,
-            "param2": 100,    # Very high threshold
+            "param2": 100,  # Very high threshold
             "min_radius": 80,
             "max_radius": 90,
-            "gaussian_kernel": 3
+            "gaussian_kernel": 3,
         }
 
         detector = CoinDetector(config)
@@ -87,7 +94,14 @@ class TestDetectorMissingCoverage:
 
     def test_coin_detector_with_multiple_circles(self):
         """Test coin detector with multiple circular objects."""
-        config = {"dp": 1, "min_dist": 100, "param1": 50, "param2": 30, "min_radius": 50, "max_radius": 150}
+        config = {
+            "dp": 1,
+            "min_dist": 100,
+            "param1": 50,
+            "param2": 30,
+            "min_radius": 50,
+            "max_radius": 150,
+        }
         detector = CoinDetector(config)
 
         # Create image with multiple circles
@@ -102,10 +116,10 @@ class TestDetectorMissingCoverage:
         # Should detect some circles
         for detection in detections:
             assert isinstance(detection, DetectionResult)
-            assert hasattr(detection, 'center')
-            assert hasattr(detection, 'radius')
-            assert hasattr(detection, 'confidence')
-            assert hasattr(detection, 'pixels_per_mm')
+            assert hasattr(detection, "center")
+            assert hasattr(detection, "radius")
+            assert hasattr(detection, "confidence")
+            assert hasattr(detection, "pixels_per_mm")
 
     def test_detection_result_with_pixels_per_mm(self):
         """Test DetectionResult creation with pixels_per_mm."""
@@ -114,7 +128,7 @@ class TestDetectorMissingCoverage:
             radius=50.0,
             confidence=0.8,
             bbox=(50, 50, 100, 100),
-            pixels_per_mm=4.0
+            pixels_per_mm=4.0,
         )
 
         assert result.center == (100, 100)
@@ -130,7 +144,7 @@ class TestDetectorMissingCoverage:
             radius=25.0,
             confidence=0.9,
             bbox=(50, 50, 50, 50),
-            pixels_per_mm=None
+            pixels_per_mm=None,
         )
 
         assert result.center == (75, 75)
@@ -141,7 +155,14 @@ class TestDetectorMissingCoverage:
 
     def test_coin_detector_configuration_access(self):
         """Test that detector configuration can be accessed."""
-        config = {"dp": 1, "min_dist": 100, "param1": 50, "param2": 30, "min_radius": 50, "max_radius": 150}
+        config = {
+            "dp": 1,
+            "min_dist": 100,
+            "param1": 50,
+            "param2": 30,
+            "min_radius": 50,
+            "max_radius": 150,
+        }
         detector = CoinDetector(config)
 
         # Test that configuration is stored and accessible
@@ -167,7 +188,14 @@ class TestDetectorMissingCoverage:
 
     def test_coin_detector_best_coin_selection(self):
         """Test get_best_coin method with multiple detections."""
-        config = {"dp": 1, "min_dist": 100, "param1": 50, "param2": 30, "min_radius": 50, "max_radius": 150}
+        config = {
+            "dp": 1,
+            "min_dist": 100,
+            "param1": 50,
+            "param2": 30,
+            "min_radius": 50,
+            "max_radius": 150,
+        }
         detector = CoinDetector(config)
 
         # Create multiple detection results with different confidence scores
@@ -176,7 +204,7 @@ class TestDetectorMissingCoverage:
             radius=25.0,
             confidence=0.7,
             bbox=(25, 25, 50, 50),
-            pixels_per_mm=4.0
+            pixels_per_mm=4.0,
         )
 
         detection2 = DetectionResult(
@@ -184,7 +212,7 @@ class TestDetectorMissingCoverage:
             radius=30.0,
             confidence=0.9,  # Higher confidence
             bbox=(70, 70, 60, 60),
-            pixels_per_mm=3.5
+            pixels_per_mm=3.5,
         )
 
         detection3 = DetectionResult(
@@ -192,7 +220,7 @@ class TestDetectorMissingCoverage:
             radius=20.0,
             confidence=0.6,
             bbox=(130, 130, 40, 40),
-            pixels_per_mm=5.0
+            pixels_per_mm=5.0,
         )
 
         detections = [detection1, detection2, detection3]
@@ -204,7 +232,14 @@ class TestDetectorMissingCoverage:
 
     def test_coin_detector_best_coin_empty_list(self):
         """Test get_best_coin with empty detection list."""
-        config = {"dp": 1, "min_dist": 100, "param1": 50, "param2": 30, "min_radius": 50, "max_radius": 150}
+        config = {
+            "dp": 1,
+            "min_dist": 100,
+            "param1": 50,
+            "param2": 30,
+            "min_radius": 50,
+            "max_radius": 150,
+        }
         detector = CoinDetector(config)
 
         best_coin = detector.get_best_coin([])
@@ -213,7 +248,14 @@ class TestDetectorMissingCoverage:
 
     def test_coin_detector_best_coin_single_detection(self):
         """Test get_best_coin with single detection."""
-        config = {"dp": 1, "min_dist": 100, "param1": 50, "param2": 30, "min_radius": 50, "max_radius": 150}
+        config = {
+            "dp": 1,
+            "min_dist": 100,
+            "param1": 50,
+            "param2": 30,
+            "min_radius": 50,
+            "max_radius": 150,
+        }
         detector = CoinDetector(config)
 
         detection = DetectionResult(
@@ -221,7 +263,7 @@ class TestDetectorMissingCoverage:
             radius=35.0,
             confidence=0.8,
             bbox=(40, 40, 70, 70),
-            pixels_per_mm=3.0
+            pixels_per_mm=3.0,
         )
 
         best_coin = detector.get_best_coin([detection])
@@ -258,14 +300,21 @@ class TestDetectorMissingCoverage:
 
     def test_coin_detector_logging_messages(self):
         """Test that coin detector produces appropriate logging messages."""
-        config = {"dp": 1, "min_dist": 100, "param1": 50, "param2": 30, "min_radius": 50, "max_radius": 150}
+        config = {
+            "dp": 1,
+            "min_dist": 100,
+            "param1": 50,
+            "param2": 30,
+            "min_radius": 50,
+            "max_radius": 150,
+        }
         detector = CoinDetector(config)
 
         # Create image with no circles
         image = np.zeros((100, 100, 3), dtype=np.uint8)
 
-        with patch.object(detector.logger, 'warning') as mock_warning:
-            with patch.object(detector.logger, 'info') as mock_info:
+        with patch.object(detector.logger, "warning") as mock_warning:
+            with patch.object(detector.logger, "info"):
                 detections = detector.detect(image, debug=True)
 
                 # Should log warning about no coins detected
@@ -298,7 +347,7 @@ class TestDetectorMissingCoverage:
             radius=25.0,
             confidence=0.8,
             bbox=(25, 25, 50, 50),
-            pixels_per_mm=4.0
+            pixels_per_mm=4.0,
         )
 
         # Verify bounding box format and reasonable values

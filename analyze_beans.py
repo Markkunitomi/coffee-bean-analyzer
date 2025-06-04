@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""analyze_beans.py - Coffee Bean Analysis CLI
+"""analyze_beans.py - Coffee Bean Analysis CLI.
 
 Usage examples:
     python analyze_beans.py image.tif
@@ -32,19 +32,19 @@ def parse_args():
 Examples:
   # Analyze single image
   python analyze_beans.py coffee_beans.tif
-  
-  # With ground truth for optimization  
+
+  # With ground truth for optimization
   python analyze_beans.py image.tif --ground-truth tests/data/beans_ground_truth.csv
-  
+
   # Custom output directory and preset
   python analyze_beans.py image.tif --output my_results/ --preset aggressive
-  
+
   # Batch process multiple images
   python analyze_beans.py *.tif --batch
-  
+
   # Quick analysis without optimization
   python analyze_beans.py image.tif --preset quick --no-optimize
-  
+
 Available presets: default, aggressive, conservative, quick
         """,
     )
@@ -190,7 +190,7 @@ def expand_file_patterns(patterns):
                 return None
 
     # Remove duplicates and sort
-    return sorted(list(set(expanded_files)))
+    return sorted(set(expanded_files))
 
 
 def validate_files(image_files, ground_truth_file=None):
@@ -268,7 +268,9 @@ def print_analysis_plan(args, image_files, ground_truth_file):
     print("\nConfiguration:")
     print(f"  Preset: {args.preset}")
     print(f"  Ground truth: {ground_truth_file if ground_truth_file else 'None'}")
-    print(f"  Output directory: {args.output_dir if args.output_dir else 'Auto-generated'}")
+    print(
+        f"  Output directory: {args.output_dir if args.output_dir else 'Auto-generated'}"
+    )
 
     # Optimization settings
     if args.no_optimize:

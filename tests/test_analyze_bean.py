@@ -167,9 +167,7 @@ class TestAnalyzeBeansScript:
         # Setup mock to raise exception
         mock_analyzer = Mock()
         mock_analyzer_class.return_value = mock_analyzer
-        mock_analyzer.analyze_image.side_effect = ValueError(
-            "Could not load image"
-        )
+        mock_analyzer.analyze_image.side_effect = ValueError("Could not load image")
 
         # Run with invalid image
         with patch("sys.argv", ["analyze_beans.py", "nonexistent.jpg"]):
@@ -225,7 +223,14 @@ class TestAnalyzeBeansScript:
         # Run with verbose flag
         with patch(
             "sys.argv",
-            ["analyze_beans.py", sample_image_path, "--verbose", "--optimize", "--ground-truth", sample_ground_truth_path],
+            [
+                "analyze_beans.py",
+                sample_image_path,
+                "--verbose",
+                "--optimize",
+                "--ground-truth",
+                sample_ground_truth_path,
+            ],
         ):
             analyze_beans.main()
 
@@ -277,7 +282,7 @@ class TestIntegrationWithScript:
         import subprocess
 
         # Run the script with minimal arguments
-        result = subprocess.run(
+        subprocess.run(
             [
                 sys.executable,
                 "analyze_beans.py",

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Coffee Bean Analyzer
-Handles different attribute names safely for measurement objects
+Handles different attribute names safely for measurement objects.
 """
 
 import datetime
@@ -24,7 +24,7 @@ from coffee_bean_analyzer.core.segmentor import create_segmentor
 
 
 class CoffeeBeanAnalyzer:
-    """Full-featured coffee bean analyzer with safe attribute access"""
+    """Full-featured coffee bean analyzer with safe attribute access."""
 
     def __init__(self, output_base_dir=None):
         """Initialize analyzer with output directory structure."""
@@ -86,7 +86,7 @@ class CoffeeBeanAnalyzer:
                 pattern = os.path.join(search_dir, ext)
                 found_images.extend(glob.glob(pattern))
 
-        return sorted(list(set(found_images)))
+        return sorted(set(found_images))
 
     def _safe_get_position(self, measurement):
         """Safely extract position information from measurement object."""
@@ -361,9 +361,11 @@ class CoffeeBeanAnalyzer:
                             f"Correlation: {corr:.3f}",
                             transform=axes[1, 2].transAxes,
                             fontweight="bold",
-                            bbox=dict(
-                                boxstyle="round,pad=0.3", facecolor="white", alpha=0.8
-                            ),
+                            bbox={
+                                "boxstyle": "round,pad=0.3",
+                                "facecolor": "white",
+                                "alpha": 0.8,
+                            },
                         )
                 else:
                     axes[1, 1].text(
@@ -1330,7 +1332,7 @@ class CoffeeBeanAnalyzer:
             print("🔄" * 20)
 
             try:
-                results = self.analyze_image(
+                self.analyze_image(
                     image_path,
                     ground_truth_path,
                     config_preset=config_preset,

@@ -1,4 +1,4 @@
-"""Coffee Bean Analyzer - Command Line Interface
+"""Coffee Bean Analyzer - Command Line Interface.
 
 Main CLI entry point providing commands for image analysis, batch processing,
 and parameter optimization.
@@ -28,7 +28,7 @@ __version__ = "0.1.0"
 @click.option("--log-file", type=click.Path(), help="Write logs to file")
 @click.pass_context
 def cli(ctx, verbose: bool, quiet: bool, log_file: Optional[str]):
-    """Coffee Bean Size Analysis Tool
+    """Coffee Bean Size Analysis Tool.
 
     A computer vision tool for analyzing coffee bean dimensions using
     watershed segmentation and scale calibration.
@@ -188,7 +188,7 @@ def analyze(
 
 # Error handler for better user experience
 def handle_exception(exc_type, exc_value, exc_traceback):
-    """Global exception handler for CLI"""
+    """Global exception handler for CLI."""
     if issubclass(exc_type, KeyboardInterrupt):
         click.echo("\n⚠️  Operation cancelled by user")
         sys.exit(1)

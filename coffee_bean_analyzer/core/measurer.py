@@ -1,4 +1,4 @@
-"""Coffee Bean Analyzer - Bean Measurement Module
+"""Coffee Bean Analyzer - Bean Measurement Module.
 
 Adapted from the original coffee_bean_analyzer.py script.
 Handles measurement of individual coffee bean properties and spatial analysis.
@@ -17,7 +17,7 @@ from .detector import DetectionResult
 
 @dataclass
 class BeanMeasurement:
-    """Container for individual bean measurements"""
+    """Container for individual bean measurements."""
 
     bean_id: int
     centroid_x: float
@@ -52,7 +52,7 @@ class BeanMeasurement:
 
 @dataclass
 class MeasurementResult:
-    """Container for measurement results"""
+    """Container for measurement results."""
 
     measurements: List[BeanMeasurement]
     total_beans: int

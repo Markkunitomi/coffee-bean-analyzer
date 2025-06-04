@@ -26,9 +26,7 @@ class TestCoffeeBeanAnalyzer:
     @pytest.fixture
     def analyzer(self, tmp_path):
         """Create analyzer instance with temporary directory."""
-        return CoffeeBeanAnalyzer(
-            output_base_dir=str(tmp_path / "test_output")
-        )
+        return CoffeeBeanAnalyzer(output_base_dir=str(tmp_path / "test_output"))
 
     @pytest.fixture
     def sample_image(self):
@@ -414,9 +412,7 @@ class TestIntegration:
         ground_truth.to_csv(gt_path, index=False)
 
         # Run analysis
-        analyzer = CoffeeBeanAnalyzer(
-            output_base_dir=str(tmp_path / "output")
-        )
+        analyzer = CoffeeBeanAnalyzer(output_base_dir=str(tmp_path / "output"))
 
         # We can't easily test the full pipeline without mocking everything,
         # but we can at least verify the structure is set up correctly

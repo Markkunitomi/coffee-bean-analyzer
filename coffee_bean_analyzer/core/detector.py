@@ -1,4 +1,4 @@
-"""Coffee Bean Analyzer - Core Detection Module
+"""Coffee Bean Analyzer - Core Detection Module.
 
 Adapted from the original coffee_bean_analyzer.py script.
 Handles detection of coins (for scale calibration) and coffee beans.
@@ -14,7 +14,7 @@ import numpy as np
 
 @dataclass
 class DetectionResult:
-    """Container for detection results"""
+    """Container for detection results."""
 
     center: Tuple[int, int]
     radius: float
@@ -192,7 +192,7 @@ class BeanDetector:
         # Get region properties (from your measure_beans function)
         props = measure.regionprops(labels)
 
-        for i, prop in enumerate(props):
+        for _i, prop in enumerate(props):
             # Filter out very small regions (your original logic)
             if prop.area < self.min_area:
                 continue

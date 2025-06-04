@@ -42,14 +42,22 @@ class TestFileFinder:
         (test_data_dir / "readme.txt").touch()
         (data_dir / "config.yaml").touch()
 
-        with patch('pathlib.Path.cwd', return_value=tmp_path):
+        with patch("pathlib.Path.cwd", return_value=tmp_path):
             # Mock the default search directories to use our test directories
-            with patch.object(FileFinder, 'find_image_files') as mock_find:
+            with patch.object(FileFinder, "find_image_files"):
                 search_dirs = [str(test_data_dir), str(data_dir), str(tmp_path)]
 
                 # Call the actual implementation manually
                 import glob
-                image_extensions = ["*.tif", "*.TIF", "*.jpg", "*.JPG", "*.png", "*.PNG"]
+
+                image_extensions = [
+                    "*.tif",
+                    "*.TIF",
+                    "*.jpg",
+                    "*.JPG",
+                    "*.png",
+                    "*.PNG",
+                ]
                 found_images = []
 
                 for search_dir in search_dirs:
@@ -57,7 +65,7 @@ class TestFileFinder:
                         pattern = str(Path(search_dir) / ext)
                         found_images.extend(Path(p) for p in glob.glob(pattern))
 
-                result = sorted(list(set(found_images)))
+                result = sorted(set(found_images))
 
                 # Verify results
                 assert len(result) == 4
@@ -86,6 +94,7 @@ class TestFileFinder:
 
         # Test the actual implementation
         import glob
+
         search_dirs = [str(custom_dir1), str(custom_dir2)]
         image_extensions = ["*.tif", "*.TIF", "*.jpg", "*.JPG", "*.png", "*.PNG"]
         found_images = []
@@ -95,7 +104,7 @@ class TestFileFinder:
                 pattern = str(Path(search_dir) / ext)
                 found_images.extend(Path(p) for p in glob.glob(pattern))
 
-        result = sorted(list(set(found_images)))
+        result = sorted(set(found_images))
 
         # Verify results
         assert len(result) == 3
@@ -114,6 +123,7 @@ class TestFileFinder:
 
         # Test the actual implementation
         import glob
+
         search_dirs = [str(empty_dir1), str(empty_dir2)]
         image_extensions = ["*.tif", "*.TIF", "*.jpg", "*.JPG", "*.png", "*.PNG"]
         found_images = []
@@ -123,7 +133,7 @@ class TestFileFinder:
                 pattern = str(Path(search_dir) / ext)
                 found_images.extend(Path(p) for p in glob.glob(pattern))
 
-        result = sorted(list(set(found_images)))
+        result = sorted(set(found_images))
 
         # Should find no images
         assert len(result) == 0
@@ -132,6 +142,7 @@ class TestFileFinder:
         """Test finding image files in non-existent directories."""
         # Test the actual implementation with non-existent directories
         import glob
+
         search_dirs = ["/nonexistent/dir1", "/nonexistent/dir2"]
         image_extensions = ["*.tif", "*.TIF", "*.jpg", "*.JPG", "*.png", "*.PNG"]
         found_images = []
@@ -141,7 +152,7 @@ class TestFileFinder:
                 pattern = str(Path(search_dir) / ext)
                 found_images.extend(Path(p) for p in glob.glob(pattern))
 
-        result = sorted(list(set(found_images)))
+        result = sorted(set(found_images))
 
         # Should find no images
         assert len(result) == 0
@@ -165,11 +176,11 @@ class TestReportGenerator:
         # Mock data
         original_results = {
             "measurements": [Mock(), Mock()],
-            "parameters": {"param1": 5, "param2": "test"}
+            "parameters": {"param1": 5, "param2": "test"},
         }
         optimized_results = {
             "measurements": [Mock(), Mock(), Mock()],
-            "parameters": {"param1": 7, "param2": "optimized"}
+            "parameters": {"param1": 7, "param2": "optimized"},
         }
         coin_detection = Mock()
         coin_detection.center = (100, 100)
@@ -178,10 +189,7 @@ class TestReportGenerator:
 
         # Should not raise an exception (method is just a pass currently)
         generator.generate_analysis_report(
-            "test_image",
-            original_results,
-            optimized_results,
-            coin_detection
+            "test_image", original_results, optimized_results, coin_detection
         )
 
     def test_generate_summary_report(self, tmp_path):
@@ -192,15 +200,16 @@ class TestReportGenerator:
         # Mock data
         analysis_results = {
             "image1": {"original": {"measurements": []}, "optimized": None},
-            "image2": {"original": {"measurements": []}, "optimized": {"measurements": []}}
+            "image2": {
+                "original": {"measurements": []},
+                "optimized": {"measurements": []},
+            },
         }
         optimization_results = {"best_params": {"param1": 5}, "score": 0.85}
 
         # Should not raise an exception (method is just a pass currently)
         generator.generate_summary_report(
-            analysis_results,
-            optimization_results,
-            output_dir
+            analysis_results, optimization_results, output_dir
         )
 
 
@@ -223,10 +232,7 @@ class TestVisualizationGenerator:
         image = np.zeros((100, 100, 3), dtype=np.uint8)
 
         # Mock results
-        results = {
-            "measurements": [Mock(), Mock()],
-            "parameters": {"param1": 5}
-        }
+        results = {"measurements": [Mock(), Mock()], "parameters": {"param1": 5}}
 
         # Mock coin detection
         coin_detection = Mock()
@@ -235,11 +241,7 @@ class TestVisualizationGenerator:
 
         # Should not raise an exception (method is just a pass currently)
         generator.create_analysis_visualization(
-            image,
-            results,
-            coin_detection,
-            "test_image",
-            is_optimized=False
+            image, results, coin_detection, "test_image", is_optimized=False
         )
 
     def test_create_optimization_comparison(self, tmp_path):
@@ -253,9 +255,7 @@ class TestVisualizationGenerator:
 
         # Should not raise an exception (method is just a pass currently)
         generator.create_optimization_comparison(
-            "test_image",
-            original_results,
-            optimized_results
+            "test_image", original_results, optimized_results
         )
 
 
@@ -264,7 +264,7 @@ class TestDataHandler:
 
     def test_initialization_default_dir(self):
         """Test DataHandler initialization with default directory."""
-        with patch('datetime.datetime') as mock_datetime:
+        with patch("datetime.datetime") as mock_datetime:
             mock_datetime.now.return_value.strftime.return_value = "20240101_120000"
 
             handler = DataHandler()
@@ -320,11 +320,13 @@ class TestDataHandler:
         handler = DataHandler(tmp_path / "test_output")
 
         # Create test ground truth CSV
-        ground_truth_data = pd.DataFrame({
-            "length": [10.0, 12.0, 11.5],
-            "width": [8.0, 9.0, 8.5],
-            "area": [65.0, 85.0, 75.0]
-        })
+        ground_truth_data = pd.DataFrame(
+            {
+                "length": [10.0, 12.0, 11.5],
+                "width": [8.0, 9.0, 8.5],
+                "area": [65.0, 85.0, 75.0],
+            }
+        )
 
         ground_truth_path = tmp_path / "ground_truth.csv"
         ground_truth_data.to_csv(ground_truth_path, index=False)
@@ -355,20 +357,17 @@ class TestDataHandler:
         # Mock measurement data
         original_results = {
             "measurements": [Mock(), Mock()],
-            "parameters": {"param1": 5}
+            "parameters": {"param1": 5},
         }
         optimized_results = {
             "measurements": [Mock(), Mock(), Mock()],
-            "parameters": {"param1": 7}
+            "parameters": {"param1": 7},
         }
         ground_truth = pd.DataFrame({"length": [10.0], "width": [8.0]})
 
         # Should not raise an exception (method is just a pass currently)
         handler.save_measurement_data(
-            "test_image",
-            original_results,
-            optimized_results,
-            ground_truth
+            "test_image", original_results, optimized_results, ground_truth
         )
 
     def test_save_optimization_results(self, tmp_path):
@@ -441,10 +440,7 @@ class TestUtilsIntegration:
         cv2.imwrite(str(test_image_path), test_image)
 
         # Create test ground truth
-        ground_truth_data = pd.DataFrame({
-            "length": [10.0, 12.0],
-            "width": [8.0, 9.0]
-        })
+        ground_truth_data = pd.DataFrame({"length": [10.0, 12.0], "width": [8.0, 9.0]})
         ground_truth_path = tmp_path / "ground_truth.csv"
         ground_truth_data.to_csv(ground_truth_path, index=False)
 
@@ -463,26 +459,17 @@ class TestUtilsIntegration:
 
         # 3. Save data
         data_handler.save_measurement_data(
-            "test_bean_image",
-            original_results,
-            optimized_results,
-            loaded_gt
+            "test_bean_image", original_results, optimized_results, loaded_gt
         )
 
         # 4. Generate reports
         report_generator.generate_analysis_report(
-            "test_bean_image",
-            original_results,
-            optimized_results,
-            coin_detection
+            "test_bean_image", original_results, optimized_results, coin_detection
         )
 
         # 5. Generate visualizations
         viz_generator.create_analysis_visualization(
-            loaded_image,
-            original_results,
-            coin_detection,
-            "test_bean_image"
+            loaded_image, original_results, coin_detection, "test_bean_image"
         )
 
         # Verify directory structure was maintained
@@ -514,11 +501,12 @@ class TestUtilsIntegration:
             str(tmp_path / "data" / "input"),
             str(tmp_path / "data" / "sample"),
             str(tmp_path / "tests" / "data"),
-            str(tmp_path)
+            str(tmp_path),
         ]
 
         # Simulate FileFinder logic
         import glob
+
         image_extensions = ["*.tif", "*.TIF", "*.jpg", "*.JPG", "*.png", "*.PNG"]
         found_images = []
 
@@ -527,7 +515,7 @@ class TestUtilsIntegration:
                 pattern = str(Path(search_dir) / ext)
                 found_images.extend(Path(p) for p in glob.glob(pattern))
 
-        result = sorted(list(set(found_images)))
+        result = sorted(set(found_images))
 
         # Verify all image files were found
         assert len(result) == 5

@@ -22,4 +22,4 @@ class FileFinder:
                 pattern = str(Path(search_dir) / ext)
                 found_images.extend(Path(p) for p in glob.glob(pattern))
 
-        return sorted(list(set(found_images)))
+        return sorted(set(found_images))

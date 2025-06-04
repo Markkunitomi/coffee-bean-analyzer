@@ -25,7 +25,7 @@ class TestCLIMain:
 
     def test_cli_help(self):
         """Test CLI help output."""
-        result = self.runner.invoke(cli, ['--help'])
+        result = self.runner.invoke(cli, ["--help"])
 
         assert result.exit_code == 0
         assert "Coffee Bean Size Analysis Tool" in result.output
@@ -33,7 +33,7 @@ class TestCLIMain:
 
     def test_cli_version(self):
         """Test CLI version output."""
-        result = self.runner.invoke(cli, ['--version'])
+        result = self.runner.invoke(cli, ["--version"])
 
         assert result.exit_code == 0
         # Should contain version information
@@ -41,7 +41,7 @@ class TestCLIMain:
 
     def test_cli_verbose_flag(self):
         """Test CLI with verbose flag."""
-        result = self.runner.invoke(cli, ['--verbose', '--help'])
+        result = self.runner.invoke(cli, ["--verbose", "--help"])
 
         assert result.exit_code == 0
         assert "Coffee Bean Size Analysis Tool" in result.output
@@ -49,7 +49,7 @@ class TestCLIMain:
 
     def test_cli_quiet_flag(self):
         """Test CLI with quiet flag."""
-        result = self.runner.invoke(cli, ['--quiet', '--help'])
+        result = self.runner.invoke(cli, ["--quiet", "--help"])
 
         assert result.exit_code == 0
         assert "Coffee Bean Size Analysis Tool" in result.output
@@ -59,7 +59,7 @@ class TestCLIMain:
         """Test CLI with log file option."""
         log_file = tmp_path / "test.log"
 
-        result = self.runner.invoke(cli, ['--log-file', str(log_file), '--help'])
+        result = self.runner.invoke(cli, ["--log-file", str(log_file), "--help"])
 
         assert result.exit_code == 0
         assert "Coffee Bean Size Analysis Tool" in result.output
@@ -67,7 +67,9 @@ class TestCLIMain:
 
     def test_cli_context_setup(self):
         """Test that CLI properly sets up context."""
-        result = self.runner.invoke(cli, ['--verbose', '--log-file', 'test.log', '--help'])
+        result = self.runner.invoke(
+            cli, ["--verbose", "--log-file", "test.log", "--help"]
+        )
 
         assert result.exit_code == 0
         assert "Coffee Bean Size Analysis Tool" in result.output
@@ -83,7 +85,7 @@ class TestAnalyzeCommand:
 
     def test_analyze_command_help(self):
         """Test analyze command help."""
-        result = self.runner.invoke(cli, ['analyze', '--help'])
+        result = self.runner.invoke(cli, ["analyze", "--help"])
 
         # Should show help without error even if command doesn't exist yet
         # or show that analyze command doesn't exist
@@ -98,14 +100,14 @@ class TestAnalyzeCommand:
 
         output_dir = tmp_path / "output"
 
-        with patch('coffee_bean_analyzer.cli.commands.analyze.analyze_command') as mock_analyze:
+        with patch(
+            "coffee_bean_analyzer.cli.commands.analyze.analyze_command"
+        ) as mock_analyze:
             mock_analyze.return_value = None
 
-            result = self.runner.invoke(cli, [
-                'analyze',
-                str(test_image),
-                '--output-dir', str(output_dir)
-            ])
+            result = self.runner.invoke(
+                cli, ["analyze", str(test_image), "--output-dir", str(output_dir)]
+            )
 
             # Check if command executed or if it doesn't exist yet
             assert result.exit_code in [0, 2]
@@ -118,25 +120,28 @@ class TestAnalyzeCommand:
         test_image.touch()
 
         config_file = tmp_path / "config.yaml"
-        config_data = {
-            "detection": {
-                "coin_detection": {"dp": 1.5}
-            }
-        }
-        with open(config_file, 'w') as f:
+        config_data = {"detection": {"coin_detection": {"dp": 1.5}}}
+        with open(config_file, "w") as f:
             yaml.dump(config_data, f)
 
         output_dir = tmp_path / "output"
 
-        with patch('coffee_bean_analyzer.cli.commands.analyze.analyze_command') as mock_analyze:
+        with patch(
+            "coffee_bean_analyzer.cli.commands.analyze.analyze_command"
+        ) as mock_analyze:
             mock_analyze.return_value = None
 
-            result = self.runner.invoke(cli, [
-                'analyze',
-                str(test_image),
-                '--output-dir', str(output_dir),
-                '--config', str(config_file)
-            ])
+            result = self.runner.invoke(
+                cli,
+                [
+                    "analyze",
+                    str(test_image),
+                    "--output-dir",
+                    str(output_dir),
+                    "--config",
+                    str(config_file),
+                ],
+            )
 
             assert result.exit_code in [0, 2]
 
@@ -152,16 +157,23 @@ class TestAnalyzeCommand:
 
         output_dir = tmp_path / "output"
 
-        with patch('coffee_bean_analyzer.cli.commands.analyze.analyze_command') as mock_analyze:
+        with patch(
+            "coffee_bean_analyzer.cli.commands.analyze.analyze_command"
+        ) as mock_analyze:
             mock_analyze.return_value = None
 
-            result = self.runner.invoke(cli, [
-                'analyze',
-                str(test_image),
-                '--output-dir', str(output_dir),
-                '--ground-truth', str(ground_truth_file),
-                '--optimize'
-            ])
+            result = self.runner.invoke(
+                cli,
+                [
+                    "analyze",
+                    str(test_image),
+                    "--output-dir",
+                    str(output_dir),
+                    "--ground-truth",
+                    str(ground_truth_file),
+                    "--optimize",
+                ],
+            )
 
             assert result.exit_code in [0, 2]
 
@@ -175,7 +187,7 @@ class TestBatchCommand:
 
     def test_batch_command_help(self):
         """Test batch command help."""
-        result = self.runner.invoke(cli, ['batch', '--help'])
+        result = self.runner.invoke(cli, ["batch", "--help"])
 
         # Should show help without error even if command doesn't exist yet
         assert result.exit_code in [0, 2]
@@ -191,14 +203,14 @@ class TestBatchCommand:
 
         output_dir = tmp_path / "output"
 
-        with patch('coffee_bean_analyzer.cli.commands.batch.batch_command') as mock_batch:
+        with patch(
+            "coffee_bean_analyzer.cli.commands.batch.batch_command"
+        ) as mock_batch:
             mock_batch.return_value = None
 
-            result = self.runner.invoke(cli, [
-                'batch',
-                str(input_dir),
-                '--output-dir', str(output_dir)
-            ])
+            result = self.runner.invoke(
+                cli, ["batch", str(input_dir), "--output-dir", str(output_dir)]
+            )
 
             assert result.exit_code in [0, 2]
 
@@ -212,7 +224,7 @@ class TestOptimizeCommand:
 
     def test_optimize_command_help(self):
         """Test optimize command help."""
-        result = self.runner.invoke(cli, ['optimize', '--help'])
+        result = self.runner.invoke(cli, ["optimize", "--help"])
 
         # Should show help without error even if command doesn't exist yet
         assert result.exit_code in [0, 2]
@@ -229,15 +241,22 @@ class TestOptimizeCommand:
 
         output_dir = tmp_path / "output"
 
-        with patch('coffee_bean_analyzer.cli.commands.optimize.optimize_command') as mock_optimize:
+        with patch(
+            "coffee_bean_analyzer.cli.commands.optimize.optimize_command"
+        ) as mock_optimize:
             mock_optimize.return_value = None
 
-            result = self.runner.invoke(cli, [
-                'optimize',
-                str(test_image),
-                '--ground-truth', str(ground_truth_file),
-                '--output-dir', str(output_dir)
-            ])
+            result = self.runner.invoke(
+                cli,
+                [
+                    "optimize",
+                    str(test_image),
+                    "--ground-truth",
+                    str(ground_truth_file),
+                    "--output-dir",
+                    str(output_dir),
+                ],
+            )
 
             assert result.exit_code in [0, 2]
 
@@ -252,7 +271,12 @@ class TestCLIIntegration:
     def test_cli_command_chaining(self):
         """Test that CLI commands can be chained properly."""
         # Test help for different commands
-        commands_to_test = ['--help', 'analyze --help', 'batch --help', 'optimize --help']
+        commands_to_test = [
+            "--help",
+            "analyze --help",
+            "batch --help",
+            "optimize --help",
+        ]
 
         for cmd in commands_to_test:
             result = self.runner.invoke(cli, cmd.split())
@@ -261,14 +285,14 @@ class TestCLIIntegration:
 
     def test_cli_error_handling(self):
         """Test CLI error handling for invalid commands."""
-        result = self.runner.invoke(cli, ['nonexistent-command'])
+        result = self.runner.invoke(cli, ["nonexistent-command"])
 
         assert result.exit_code == 2  # Click returns 2 for no such command
         assert "No such command" in result.output or "Usage:" in result.output
 
     def test_cli_with_invalid_options(self):
         """Test CLI with invalid options."""
-        result = self.runner.invoke(cli, ['--invalid-option'])
+        result = self.runner.invoke(cli, ["--invalid-option"])
 
         assert result.exit_code == 2  # Click returns 2 for invalid options
         assert "No such option" in result.output or "Usage:" in result.output
@@ -276,13 +300,13 @@ class TestCLIIntegration:
     def test_logging_configuration(self):
         """Test that logging flags are accepted correctly."""
         test_cases = [
-            ['--verbose'],
-            ['--quiet'],
+            ["--verbose"],
+            ["--quiet"],
             [],  # No flags
         ]
 
         for args in test_cases:
-            result = self.runner.invoke(cli, args + ['--help'])
+            result = self.runner.invoke(cli, args + ["--help"])
 
             # All should succeed
             assert result.exit_code == 0
@@ -293,11 +317,13 @@ class TestCLIIntegration:
         nonexistent_file = tmp_path / "nonexistent.jpg"
 
         # Test with nonexistent input file
-        result = self.runner.invoke(cli, ['analyze', str(nonexistent_file)])
+        result = self.runner.invoke(cli, ["analyze", str(nonexistent_file)])
 
         # Should fail due to file not existing (if analyze command is implemented)
         # or show no such command error
-        assert result.exit_code in [2]  # Either path validation error or no such command
+        assert result.exit_code in [
+            2
+        ]  # Either path validation error or no such command
 
     def test_output_format_validation(self, tmp_path):
         """Test output format validation."""
@@ -305,11 +331,9 @@ class TestCLIIntegration:
         test_image.touch()
 
         # Test with invalid output format
-        result = self.runner.invoke(cli, [
-            'analyze',
-            str(test_image),
-            '--format', 'invalid_format'
-        ])
+        result = self.runner.invoke(
+            cli, ["analyze", str(test_image), "--format", "invalid_format"]
+        )
 
         # Should fail due to invalid choice (if analyze command is implemented)
         assert result.exit_code in [2]  # Either validation error or no such command
@@ -322,11 +346,9 @@ class TestCLIIntegration:
         nonexistent_config = tmp_path / "nonexistent_config.yaml"
 
         # Test with nonexistent config file
-        result = self.runner.invoke(cli, [
-            'analyze',
-            str(test_image),
-            '--config', str(nonexistent_config)
-        ])
+        result = self.runner.invoke(
+            cli, ["analyze", str(test_image), "--config", str(nonexistent_config)]
+        )
 
         # Should fail due to config file not existing (if analyze command is implemented)
         assert result.exit_code in [2]
@@ -340,8 +362,8 @@ class TestCLIUtilities:
         runner = CliRunner()
 
         # Test that context is properly managed
-        with patch('coffee_bean_analyzer.cli.main.setup_logging'):
-            result = runner.invoke(cli, ['--verbose', '--help'])
+        with patch("coffee_bean_analyzer.cli.main.setup_logging"):
+            result = runner.invoke(cli, ["--verbose", "--help"])
 
             assert result.exit_code == 0
 
@@ -357,12 +379,10 @@ class TestCLIUtilities:
         config_file.write_text("test: config")
 
         # Test parameter parsing
-        with patch('coffee_bean_analyzer.cli.main.setup_logging'):
-            result = runner.invoke(cli, [
-                '--verbose',
-                '--log-file', str(tmp_path / "test.log"),
-                '--help'
-            ])
+        with patch("coffee_bean_analyzer.cli.main.setup_logging"):
+            result = runner.invoke(
+                cli, ["--verbose", "--log-file", str(tmp_path / "test.log"), "--help"]
+            )
 
             assert result.exit_code == 0
 
@@ -371,7 +391,7 @@ class TestCLIUtilities:
         runner = CliRunner()
 
         # Test with invalid command
-        result = runner.invoke(cli, ['invalid_command'])
+        result = runner.invoke(cli, ["invalid_command"])
 
         assert result.exit_code == 2
         # Error message should be user-friendly
@@ -387,8 +407,9 @@ class TestCommandImports:
         try:
             # Try to import the analyze command
             from coffee_bean_analyzer.cli.commands.analyze import analyze_command
+
             # If successful, it should be a function or command
-            assert callable(analyze_command) or hasattr(analyze_command, 'callback')
+            assert callable(analyze_command) or hasattr(analyze_command, "callback")
         except ImportError:
             # Command module may not be fully implemented yet
             pytest.skip("Analyze command not yet implemented")
@@ -397,7 +418,8 @@ class TestCommandImports:
         """Test that batch command can be imported."""
         try:
             from coffee_bean_analyzer.cli.commands.batch import batch_command
-            assert callable(batch_command) or hasattr(batch_command, 'callback')
+
+            assert callable(batch_command) or hasattr(batch_command, "callback")
         except ImportError:
             pytest.skip("Batch command not yet implemented")
 
@@ -405,7 +427,8 @@ class TestCommandImports:
         """Test that optimize command can be imported."""
         try:
             from coffee_bean_analyzer.cli.commands.optimize import optimize_command
-            assert callable(optimize_command) or hasattr(optimize_command, 'callback')
+
+            assert callable(optimize_command) or hasattr(optimize_command, "callback")
         except ImportError:
             pytest.skip("Optimize command not yet implemented")
 
@@ -413,6 +436,7 @@ class TestCommandImports:
         """Test that logging setup can be imported."""
         try:
             from coffee_bean_analyzer.utils.logging_config import setup_logging
+
             assert callable(setup_logging)
         except ImportError:
             # Logging config may not exist yet
@@ -428,7 +452,7 @@ class TestCLIDocumentation:
 
     def test_main_help_content(self):
         """Test main CLI help content."""
-        result = self.runner.invoke(cli, ['--help'])
+        result = self.runner.invoke(cli, ["--help"])
 
         assert result.exit_code == 0
 
@@ -440,21 +464,22 @@ class TestCLIDocumentation:
 
     def test_help_examples_present(self):
         """Test that help includes usage examples."""
-        result = self.runner.invoke(cli, ['--help'])
+        result = self.runner.invoke(cli, ["--help"])
 
         assert result.exit_code == 0
 
         # Should include examples in help text
         help_content = result.output.lower()
         # Look for example indicators
-        has_examples = any(word in help_content for word in [
-            "example", "examples", "usage", "coffee-bean-analyzer"
-        ])
+        has_examples = any(
+            word in help_content
+            for word in ["example", "examples", "usage", "coffee-bean-analyzer"]
+        )
         assert has_examples
 
     def test_version_information(self):
         """Test version information is available."""
-        result = self.runner.invoke(cli, ['--version'])
+        result = self.runner.invoke(cli, ["--version"])
 
         assert result.exit_code == 0
         # Should contain version number

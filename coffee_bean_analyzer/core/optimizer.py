@@ -1,4 +1,4 @@
-"""Coffee Bean Analyzer - Parameter Optimization Module
+"""Coffee Bean Analyzer - Parameter Optimization Module.
 
 Adapted from the original coffee_bean_analyzer.py script.
 Handles automated parameter optimization using grid search for bean segmentation.
@@ -22,7 +22,7 @@ from .segmentor import BeanSegmentor
 
 @dataclass
 class OptimizationResult:
-    """Container for optimization results"""
+    """Container for optimization results."""
 
     best_params: Dict[str, Any]
     best_score: float
@@ -530,7 +530,7 @@ class ParameterOptimizer:
                     np.mean(scores_list) for scores_list in category_scores.values()
                 ]
                 if len(category_means) > 1:
-                    overall_mean = np.mean(scores)
+                    np.mean(scores)
                     between_variance = np.var(category_means)
                     total_variance = np.var(scores) if np.var(scores) > 0 else 1.0
                     importance_scores[param_name] = between_variance / total_variance

@@ -164,8 +164,7 @@ class TestCoinExcluder:
     @pytest.fixture
     def binary_image(self):
         """Create sample binary image."""
-        img = np.ones((100, 100), dtype=np.uint8) * 255
-        return img
+        return np.ones((100, 100), dtype=np.uint8) * 255
 
     def test_create_coin_mask_no_coin(self, excluder):
         """Test mask creation when no coin is provided."""
