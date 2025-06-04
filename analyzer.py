@@ -166,9 +166,8 @@ class CoffeeBeanAnalyzer:
                     value = data[attr_name]
                     if value is not None:
                         return value
-                    else:
-                        # Explicitly found None in to_dict, use default
-                        return default
+                    # Explicitly found None in to_dict, use default
+                    return default
             except:
                 pass
 

@@ -1,6 +1,7 @@
 # coffee_bean_analyzer/utils/file_finder.py
 from pathlib import Path
-from typing import Optional, List
+from typing import List, Optional
+
 
 class FileFinder:
     """Utility for finding image files."""

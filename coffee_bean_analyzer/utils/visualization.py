@@ -1,8 +1,10 @@
 # coffee_bean_analyzer/utils/visualization.py
 from pathlib import Path
-from typing import Dict, Any, Optional, List
-import numpy as np
+from typing import Any, Dict, List
+
 import cv2
+import numpy as np
+
 
 class VisualizationGenerator:
     """Handles all visualization generation."""
@@ -44,7 +46,7 @@ def create_analysis_visualization(
     """Create analysis visualization with annotations - standalone function."""
     # Create a copy of the image to annotate
     annotated = image.copy()
-    
+
     # Draw coin detection if available
     if coin_detection:
         center = (int(coin_detection.center[0]), int(coin_detection.center[1]))
@@ -52,7 +54,7 @@ def create_analysis_visualization(
         cv2.circle(annotated, center, radius, (0, 255, 255), 3)  # Yellow circle
         cv2.putText(annotated, "COIN", (center[0] - 20, center[1] - radius - 10),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
-    
+
     # Draw bean measurements
     for i, measurement in enumerate(measurements):
         if hasattr(measurement, 'centroid'):
@@ -62,11 +64,11 @@ def create_analysis_visualization(
             # Draw bean number
             cv2.putText(annotated, str(i + 1), (center[0] + 5, center[1] - 5),
                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-    
+
     # Save the annotated image
     output_path.parent.mkdir(parents=True, exist_ok=True)
     cv2.imwrite(str(output_path), annotated)
-    
+
     return output_path
 
 
@@ -79,7 +81,7 @@ def create_optimization_comparison(
     """Create optimization comparison visualization - standalone function."""
     # Create a simple text comparison for now
     # In a real implementation, this would create side-by-side visualizations
-    
+
     comparison_text = [
         f"Optimization Comparison for {image_name}",
         "=" * 50,
@@ -90,11 +92,11 @@ def create_optimization_comparison(
         f"Original: {original_results.get('parameters', 'N/A')}",
         f"Optimized: {optimized_results.get('parameters', 'N/A')}",
     ]
-    
+
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path.with_suffix('.txt'), 'w') as f:
         f.write('\n'.join(comparison_text))
-    
+
     # For now, just return the text file path
     # In a real implementation, this would generate an actual image comparison
     return output_path.with_suffix('.txt')

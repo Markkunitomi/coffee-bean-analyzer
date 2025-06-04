@@ -13,11 +13,11 @@ import pytest
 # Add the project root to Python path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from analyzer import CoffeeBeanAnalyzer
 from coffee_bean_analyzer.core.detector import DetectionResult
 from coffee_bean_analyzer.core.measurer import BeanMeasurement, MeasurementResult
 from coffee_bean_analyzer.core.optimizer import OptimizationResult
 from coffee_bean_analyzer.core.segmentor import SegmentationResult
-from analyzer import CoffeeBeanAnalyzer
 
 
 class TestCoffeeBeanAnalyzer:

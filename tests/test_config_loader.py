@@ -1,26 +1,25 @@
 #!/usr/bin/env python3
 """Unit tests for the config loader module using pytest."""
 
-import tempfile
-import yaml
 from pathlib import Path
-from unittest.mock import patch, mock_open
+from unittest.mock import patch
 
 import pytest
+import yaml
 
 from coffee_bean_analyzer.config.config_loader import (
+    AppConfig,
     DetectionConfig,
-    SegmentationConfig,
     MeasurementConfig,
     OptimizationConfig,
     OutputConfig,
-    AppConfig,
-    load_config,
-    load_default_config,
+    SegmentationConfig,
     deep_merge,
     flatten_dict,
-    validate_config,
+    load_config,
+    load_default_config,
     save_config,
+    validate_config,
 )
 
 
@@ -30,7 +29,7 @@ class TestDetectionConfig:
     def test_default_values(self):
         """Test default configuration values."""
         config = DetectionConfig()
-        
+
         # Coin detection defaults
         assert config.coin_hough_dp == 1.0
         assert config.coin_hough_min_dist == 100
@@ -38,7 +37,7 @@ class TestDetectionConfig:
         assert config.coin_hough_param2 == 30
         assert config.coin_min_radius == 50
         assert config.coin_max_radius == 150
-        
+
         # Bean detection defaults
         assert config.bean_min_area == 500
         assert config.bean_max_area == 5000
@@ -53,7 +52,7 @@ class TestDetectionConfig:
             bean_min_area=1000,
             bean_max_aspect_ratio=2.5
         )
-        
+
         assert config.coin_hough_dp == 2.0
         assert config.bean_min_area == 1000
         assert config.bean_max_aspect_ratio == 2.5
@@ -68,7 +67,7 @@ class TestSegmentationConfig:
     def test_default_values(self):
         """Test default configuration values."""
         config = SegmentationConfig()
-        
+
         assert config.gaussian_blur_kernel == 5
         assert config.morphology_kernel == 3
         assert config.distance_threshold == 0.5
@@ -83,7 +82,7 @@ class TestSegmentationConfig:
             gaussian_blur_kernel=7,
             fill_holes=False
         )
-        
+
         assert config.gaussian_blur_kernel == 7
         assert config.fill_holes is False
         assert config.morphology_kernel == 3  # unchanged
@@ -95,7 +94,7 @@ class TestMeasurementConfig:
     def test_default_values(self):
         """Test default configuration values."""
         config = MeasurementConfig()
-        
+
         assert config.quarter_diameter_mm == 24.26
         assert config.measurement_precision == 2
         assert config.area_precision == 1
@@ -111,7 +110,7 @@ class TestMeasurementConfig:
             measurement_precision=3,
             min_length_mm=2.5
         )
-        
+
         assert config.quarter_diameter_mm == 24.0
         assert config.measurement_precision == 3
         assert config.min_length_mm == 2.5
@@ -123,7 +122,7 @@ class TestOptimizationConfig:
     def test_default_values(self):
         """Test default configuration values."""
         config = OptimizationConfig()
-        
+
         assert config.n_trials == 100
         assert config.timeout_seconds is None
         assert config.n_jobs == 1
@@ -138,7 +137,7 @@ class TestOptimizationConfig:
             timeout_seconds=300,
             primary_metric="f1_score"
         )
-        
+
         assert config.n_trials == 50
         assert config.timeout_seconds == 300
         assert config.primary_metric == "f1_score"
@@ -150,7 +149,7 @@ class TestOutputConfig:
     def test_default_values(self):
         """Test default configuration values."""
         config = OutputConfig()
-        
+
         assert config.save_annotated_images is True
         assert config.save_individual_beans is False
         assert config.save_intermediate_steps is False
@@ -169,7 +168,7 @@ class TestOutputConfig:
             annotation_color=(255, 0, 0),
             report_format="summary"
         )
-        
+
         assert config.save_individual_beans is True
         assert config.annotation_color == (255, 0, 0)
         assert config.report_format == "summary"
@@ -187,7 +186,7 @@ class TestAppConfig:
             optimization=OptimizationConfig(),
             output=OutputConfig()
         )
-        
+
         assert isinstance(config.detection, DetectionConfig)
         assert isinstance(config.segmentation, SegmentationConfig)
         assert isinstance(config.measurement, MeasurementConfig)
@@ -200,7 +199,7 @@ class TestAppConfig:
         """Test creating config with custom sub-configurations."""
         detection = DetectionConfig(coin_hough_dp=2.0)
         segmentation = SegmentationConfig(gaussian_blur_kernel=7)
-        
+
         config = AppConfig(
             detection=detection,
             segmentation=segmentation,
@@ -209,7 +208,7 @@ class TestAppConfig:
             output=OutputConfig(),
             log_level="DEBUG"
         )
-        
+
         assert config.detection.coin_hough_dp == 2.0
         assert config.segmentation.gaussian_blur_kernel == 7
         assert config.log_level == "DEBUG"
@@ -231,9 +230,9 @@ class TestLoadDefaultConfig:
           quarter_diameter_mm: 24.26
         """
         mock_open_text.return_value.__enter__.return_value = mock_yaml_content
-        
+
         config_data = load_default_config()
-        
+
         assert isinstance(config_data, dict)
         assert "detection" in config_data
         mock_open_text.assert_called_once()
@@ -242,14 +241,14 @@ class TestLoadDefaultConfig:
     def test_fallback_to_hardcoded_defaults(self, mock_open_text):
         """Test fallback to hardcoded defaults when package resource fails."""
         config_data = load_default_config()
-        
+
         assert isinstance(config_data, dict)
         assert "detection" in config_data
         assert "segmentation" in config_data
         assert "measurement" in config_data
         assert "optimization" in config_data
         assert "output" in config_data
-        
+
         # Check specific values
         assert config_data["detection"]["coin_detection"]["dp"] == 1
         assert config_data["measurement"]["quarter_diameter_mm"] == 24.26
@@ -261,7 +260,7 @@ class TestLoadConfig:
     def test_load_config_without_file(self):
         """Test loading config without providing a file (uses defaults)."""
         config = load_config()
-        
+
         assert isinstance(config, AppConfig)
         assert isinstance(config.detection, DetectionConfig)
         assert config.detection.coin_hough_dp == 1.0
@@ -269,7 +268,7 @@ class TestLoadConfig:
     def test_load_config_with_nonexistent_file(self):
         """Test loading config with non-existent file (should use defaults)."""
         config = load_config(Path("nonexistent_config.yaml"))
-        
+
         assert isinstance(config, AppConfig)
         assert isinstance(config.detection, DetectionConfig)
 
@@ -286,13 +285,13 @@ class TestLoadConfig:
                 "quarter_diameter_mm": 24.0
             }
         }
-        
+
         config_file = tmp_path / "test_config.yaml"
         with open(config_file, 'w') as f:
             yaml.dump(config_data, f)
-        
+
         config = load_config(config_file)
-        
+
         assert isinstance(config, AppConfig)
         assert config.detection.coin_hough_dp == 1.5
         assert config.detection.coin_hough_min_dist == 120
@@ -303,9 +302,9 @@ class TestLoadConfig:
         config_file = tmp_path / "invalid_config.yaml"
         with open(config_file, 'w') as f:
             f.write("invalid: yaml: content: [")  # Invalid YAML
-        
+
         config = load_config(config_file)
-        
+
         # Should fallback to defaults
         assert isinstance(config, AppConfig)
         assert config.detection.coin_hough_dp == 1.0
@@ -318,9 +317,9 @@ class TestDeepMerge:
         """Test merging simple dictionaries."""
         base = {"a": 1, "b": 2}
         override = {"b": 3, "c": 4}
-        
+
         result = deep_merge(base, override)
-        
+
         assert result == {"a": 1, "b": 3, "c": 4}
 
     def test_nested_merge(self):
@@ -337,9 +336,9 @@ class TestDeepMerge:
                 "new_section": {"value": 42}
             }
         }
-        
+
         result = deep_merge(base, override)
-        
+
         expected = {
             "detection": {
                 "coin": {"dp": 1.5, "min_dist": 100},
@@ -347,16 +346,16 @@ class TestDeepMerge:
                 "new_section": {"value": 42}
             }
         }
-        
+
         assert result == expected
 
     def test_override_with_non_dict(self):
         """Test overriding dict with non-dict value."""
         base = {"a": {"nested": "value"}}
         override = {"a": "simple_value"}
-        
+
         result = deep_merge(base, override)
-        
+
         assert result == {"a": "simple_value"}
 
 
@@ -376,9 +375,9 @@ class TestFlattenDict:
                 "max_area": 6000
             }
         }
-        
+
         result = flatten_dict(nested, "detection")
-        
+
         assert result["coin_hough_dp"] == 1.5
         assert result["coin_hough_min_dist"] == 120
         assert result["coin_hough_param1"] == 60
@@ -397,9 +396,9 @@ class TestFlattenDict:
             },
             "min_contour_area": 150
         }
-        
+
         result = flatten_dict(nested, "segmentation")
-        
+
         assert result["gaussian_blur_kernel"] == 7
         assert result["morphology_kernel"] == 5
         assert result["adaptive_thresh_block_size"] == 13
@@ -411,9 +410,9 @@ class TestFlattenDict:
             "quarter_diameter_mm": 24.0,
             "measurement_precision": 3
         }
-        
+
         result = flatten_dict(nested, "measurement")
-        
+
         assert result == nested
 
 
@@ -429,7 +428,7 @@ class TestValidateConfig:
             optimization=OptimizationConfig(),
             output=OutputConfig()
         )
-        
+
         # Should not raise any exception
         validate_config(config)
 
@@ -442,7 +441,7 @@ class TestValidateConfig:
             optimization=OptimizationConfig(),
             output=OutputConfig()
         )
-        
+
         with pytest.raises(ValueError, match="coin_min_radius must be less than coin_max_radius"):
             validate_config(config)
 
@@ -455,7 +454,7 @@ class TestValidateConfig:
             optimization=OptimizationConfig(),
             output=OutputConfig()
         )
-        
+
         with pytest.raises(ValueError, match="bean_min_area must be less than bean_max_area"):
             validate_config(config)
 
@@ -468,7 +467,7 @@ class TestValidateConfig:
             optimization=OptimizationConfig(),
             output=OutputConfig()
         )
-        
+
         with pytest.raises(ValueError, match="quarter_diameter_mm must be positive"):
             validate_config(config)
 
@@ -481,7 +480,7 @@ class TestValidateConfig:
             optimization=OptimizationConfig(),
             output=OutputConfig()
         )
-        
+
         with pytest.raises(ValueError, match="min_length_mm must be less than max_length_mm"):
             validate_config(config)
 
@@ -494,7 +493,7 @@ class TestValidateConfig:
             optimization=OptimizationConfig(n_trials=0),
             output=OutputConfig()
         )
-        
+
         with pytest.raises(ValueError, match="n_trials must be positive"):
             validate_config(config)
 
@@ -507,7 +506,7 @@ class TestValidateConfig:
             optimization=OptimizationConfig(validation_split=1.5),
             output=OutputConfig()
         )
-        
+
         with pytest.raises(ValueError, match="validation_split must be between 0 and 1"):
             validate_config(config)
 
@@ -524,16 +523,16 @@ class TestSaveConfig:
             optimization=OptimizationConfig(n_trials=50),
             output=OutputConfig(report_format="summary")
         )
-        
+
         output_file = tmp_path / "saved_config.yaml"
         save_config(config, output_file)
-        
+
         assert output_file.exists()
-        
+
         # Verify file content
-        with open(output_file, 'r') as f:
+        with open(output_file) as f:
             saved_data = yaml.safe_load(f)
-        
+
         assert isinstance(saved_data, dict)
         assert saved_data["detection"]["coin_detection"]["dp"] == 1.5
         assert saved_data["segmentation"]["gaussian_blur_kernel"] == 7
@@ -550,15 +549,15 @@ class TestSaveConfig:
             optimization=OptimizationConfig(n_trials=75),
             output=OutputConfig(save_individual_beans=True)
         )
-        
+
         config_file = tmp_path / "test_config.yaml"
         save_config(original_config, config_file)
-        
+
         # Reload the configuration
         reloaded_config = load_config(config_file)
-        
+
         # Verify the config loads without error and has expected structure
-        # Note: Due to the nested save structure vs flat load structure, 
+        # Note: Due to the nested save structure vs flat load structure,
         # the loaded config will have default values, but this tests basic functionality
         assert isinstance(reloaded_config, AppConfig)
         assert isinstance(reloaded_config.detection, DetectionConfig)

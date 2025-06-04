@@ -13,6 +13,7 @@ import click
 
 from ..utils.logging_config import setup_logging
 from .commands.analyze import analyze_command
+
 # from .commands.batch import batch_command
 # from .commands.optimize import optimize_command
 
@@ -157,7 +158,7 @@ def analyze(
 #     """Batch process multiple images in a directory."""
 #     pass
 
-# Commented out optimize command - module not implemented yet  
+# Commented out optimize command - module not implemented yet
 # @cli.command()
 # def optimize(...):
 #     """Optimize segmentation parameters using ground truth data."""
@@ -165,7 +166,7 @@ def analyze(
 
 
 # Commented out init command - module not implemented yet
-# @cli.command()  
+# @cli.command()
 # def init(...):
 #     """Initialize a new coffee bean analysis project."""
 #     pass

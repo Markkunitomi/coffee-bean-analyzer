@@ -314,7 +314,7 @@ def main():
 
     # Handle single image file
     image_files = [args.image]
-    
+
     # Validate files
     valid_images, ground_truth_file = validate_files(image_files, args.ground_truth)
     if not valid_images:

@@ -116,7 +116,7 @@ class CoinDetector:
                 # Calculate pixels_per_mm for this coin
                 QUARTER_DIAMETER_MM = 24.26
                 pixels_per_mm = (2 * r) / QUARTER_DIAMETER_MM
-                
+
                 # Create DetectionResult from your best circle
                 detection = DetectionResult(
                     center=(x, y),
