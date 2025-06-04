@@ -204,9 +204,8 @@ class TestAnalyzeBeansScript:
             )
 
     @patch("analyze_beans.ComprehensiveCoffeeBeanAnalyzer")
-    @patch("analyze_beans.Path")
     def test_main_verbose_output(
-        self, mock_path, mock_analyzer_class, sample_image_path, capsys
+        self, mock_analyzer_class, sample_image_path, sample_ground_truth_path, capsys
     ):
         """Test verbose output."""
         # Setup mocks
@@ -219,21 +218,22 @@ class TestAnalyzeBeansScript:
             "coin_detection": Mock(pixels_per_mm=4.0),
         }
 
-        # Make Path return a mock that exists
-        mock_path.return_value.exists.return_value = True
+        # Setup additional mocks
+        mock_analyzer.analysis_results = {}
+        mock_analyzer.generate_analysis_summary = Mock()
 
         # Run with verbose flag
         with patch(
             "sys.argv",
-            ["analyze_beans.py", sample_image_path, "--verbose", "--optimize"],
+            ["analyze_beans.py", sample_image_path, "--verbose", "--optimize", "--ground-truth", sample_ground_truth_path],
         ):
             analyze_beans.main()
 
         # Check verbose output
         captured = capsys.readouterr()
-        assert "Starting analysis" in captured.out
-        assert "Original analysis: 2 beans" in captured.out
-        assert "Optimized analysis: 3 beans" in captured.out
+        assert "🚀 Initializing analyzer..." in captured.out
+        assert "✅ Analysis complete: 2 beans detected" in captured.out
+        assert "✅ Optimization: 3 beans (+1)" in captured.out
 
 
 class TestEdgeCases:

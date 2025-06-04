@@ -20,6 +20,7 @@ class DetectionResult:
     radius: float
     confidence: float
     bbox: Tuple[int, int, int, int]  # x, y, width, height
+    pixels_per_mm: float = None  # Scale calibration
 
 
 class CoinDetector:
@@ -112,12 +113,17 @@ class CoinDetector:
             if best_circle is not None:
                 x, y, r = best_circle
 
+                # Calculate pixels_per_mm for this coin
+                QUARTER_DIAMETER_MM = 24.26
+                pixels_per_mm = (2 * r) / QUARTER_DIAMETER_MM
+                
                 # Create DetectionResult from your best circle
                 detection = DetectionResult(
                     center=(x, y),
                     radius=float(r),
                     confidence=min(best_score / 10.0, 1.0),  # Normalize score to 0-1
                     bbox=(x - r, y - r, 2 * r, 2 * r),
+                    pixels_per_mm=pixels_per_mm,
                 )
                 detections.append(detection)
 
@@ -208,6 +214,7 @@ class BeanDetector:
                 radius=equivalent_radius,
                 confidence=confidence,
                 bbox=(min_col, min_row, bbox_width, bbox_height),
+                pixels_per_mm=None,  # Not applicable for bean detection
             )
             detections.append(detection)
 

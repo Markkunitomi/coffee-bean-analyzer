@@ -23,7 +23,7 @@ except ImportError:
     sys.exit(1)
 
 
-def parse_arguments():
+def parse_args():
     """Parse command line arguments with comprehensive options."""
     parser = argparse.ArgumentParser(
         description="Coffee Bean Analysis System",
@@ -51,9 +51,8 @@ Available presets: default, aggressive, conservative, quick
 
     # Required arguments
     parser.add_argument(
-        "images",
-        nargs="+",
-        help="Input image file(s). Supports wildcards (*.tif) and multiple files.",
+        "image",
+        help="Input image file path.",
     )
 
     # Optional arguments
@@ -61,12 +60,12 @@ Available presets: default, aggressive, conservative, quick
         "--ground-truth",
         "-gt",
         type=str,
-        default="tests/data/beans_ground_truth.csv",
-        help="Ground truth CSV file (default: tests/data/beans_ground_truth.csv)",
+        default=None,
+        help="Ground truth CSV file (default: None)",
     )
 
     parser.add_argument(
-        "--output",
+        "--output-dir",
         "-o",
         type=str,
         help="Output directory (default: auto-generated with timestamp)",
@@ -231,7 +230,7 @@ def validate_files(image_files, ground_truth_file=None):
 
 def create_custom_analyzer(args):
     """Create analyzer with custom parameters from command line."""
-    analyzer = ComprehensiveCoffeeBeanAnalyzer(args.output)
+    analyzer = ComprehensiveCoffeeBeanAnalyzer(output_base_dir=args.output_dir)
 
     # Update coin detector configuration
     coin_config = {}
@@ -269,7 +268,7 @@ def print_analysis_plan(args, image_files, ground_truth_file):
     print("\nConfiguration:")
     print(f"  Preset: {args.preset}")
     print(f"  Ground truth: {ground_truth_file if ground_truth_file else 'None'}")
-    print(f"  Output directory: {args.output if args.output else 'Auto-generated'}")
+    print(f"  Output directory: {args.output_dir if args.output_dir else 'Auto-generated'}")
 
     # Optimization settings
     if args.no_optimize:
@@ -307,24 +306,15 @@ def print_analysis_plan(args, image_files, ground_truth_file):
 def main():
     """Main CLI function."""
     # Parse arguments
-    args = parse_arguments()
+    args = parse_args()
 
     # Handle special modes
     if args.dry_run:
         print("🔍 DRY RUN MODE - No analysis will be performed")
 
-    # Expand file patterns
-    if not args.quiet:
-        print("🔍 Searching for image files...")
-
-    image_files = expand_file_patterns(args.images)
-    if image_files is None:
-        sys.exit(1)
-
-    if not image_files:
-        print("❌ No valid image files found!")
-        sys.exit(1)
-
+    # Handle single image file
+    image_files = [args.image]
+    
     # Validate files
     valid_images, ground_truth_file = validate_files(image_files, args.ground_truth)
     if not valid_images:
@@ -374,7 +364,7 @@ def main():
         print("\n🚀 Initializing analyzer...")
 
     try:
-        analyzer = create_custom_analyzer(args)
+        analyzer = ComprehensiveCoffeeBeanAnalyzer(output_base_dir=args.output_dir)
 
     except Exception as e:
         print(f"❌ Error initializing analyzer: {e}")
@@ -385,12 +375,14 @@ def main():
         sys.exit(1)
 
     # Determine optimization setting
-    run_optimization = None
     if args.no_optimize:
         run_optimization = False
     elif args.optimize:
         run_optimization = True
-    # else: let analyzer decide based on ground truth availability
+    elif ground_truth_file:
+        run_optimization = None  # Let analyzer decide
+    else:
+        run_optimization = False  # Default to False when no ground truth
 
     # Process images
     success_count = 0
@@ -405,7 +397,7 @@ def main():
             # Run analysis
             results = analyzer.analyze_image_comprehensive(
                 image_path,
-                ground_truth_file,
+                ground_truth_path=ground_truth_file,
                 config_preset=args.preset,
                 run_optimization=run_optimization,
             )

@@ -158,18 +158,26 @@ class ComprehensiveCoffeeBeanAnalyzer:
 
     def _safe_get_attribute(self, measurement, attr_name, default=None):
         """Safely get an attribute from measurement object."""
-        # Direct attribute access
-        if hasattr(measurement, attr_name):
-            value = getattr(measurement, attr_name)
-            if value is not None:
-                return value
-
-        # Try from to_dict
+        # Try from to_dict first (more reliable for test mocks)
         if hasattr(measurement, "to_dict"):
             try:
                 data = measurement.to_dict()
                 if attr_name in data:
-                    return data[attr_name]
+                    value = data[attr_name]
+                    if value is not None:
+                        return value
+                    else:
+                        # Explicitly found None in to_dict, use default
+                        return default
+            except:
+                pass
+
+        # Direct attribute access as fallback
+        if hasattr(measurement, attr_name):
+            try:
+                value = getattr(measurement, attr_name)
+                if value is not None:
+                    return value
             except:
                 pass
 
@@ -227,7 +235,8 @@ class ComprehensiveCoffeeBeanAnalyzer:
 
         # Labeled segmentation
         axes[0, 2].imshow(labels, cmap="tab20")
-        axes[0, 2].set_title(f"Labeled Regions ({np.max(labels)} segments)")
+        max_label = np.max(labels) if labels.size > 0 else 0
+        axes[0, 2].set_title(f"Labeled Regions ({max_label} segments)")
         axes[0, 2].axis("off")
 
         # Annotated results - with safe attribute access
@@ -444,9 +453,12 @@ class ComprehensiveCoffeeBeanAnalyzer:
         )
 
         # Save labeled segmentation (convert to color)
-        labeled_color = cv2.applyColorMap(
-            (labels * 255 // np.max(labels)).astype(np.uint8), cv2.COLORMAP_VIRIDIS
-        )
+        max_label = np.max(labels)
+        if max_label > 0:
+            normalized_labels = (labels * 255 // max_label).astype(np.uint8)
+        else:
+            normalized_labels = labels.astype(np.uint8)
+        labeled_color = cv2.applyColorMap(normalized_labels, cv2.COLORMAP_VIRIDIS)
         cv2.imwrite(
             str(self.images_dir / f"{image_name}{suffix}_labeled_segmentation.png"),
             labeled_color,
