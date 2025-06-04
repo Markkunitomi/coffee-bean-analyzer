@@ -1,3 +1,60 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "coffee-bean-analyzer"
+version = "0.1.0"
+description = "Computer vision system for automated coffee bean analysis"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Mark Kunitomi", email = "markkunitomi@example.com"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Image Processing",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy>=1.20.0",
+    "opencv-python-headless>=4.5.0",
+    "scikit-image>=0.19.0",
+    "matplotlib>=3.5.0",
+    "pandas>=1.3.0",
+    "click>=8.0.0",
+    "pyyaml>=6.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+]
+
+[project.scripts]
+coffee-bean-analyzer = "coffee_bean_analyzer.cli.main:cli"
+
+[project.urls]
+Homepage = "https://github.com/Markkunitomi/coffee-bean-analyzer"
+Repository = "https://github.com/Markkunitomi/coffee-bean-analyzer"
+Issues = "https://github.com/Markkunitomi/coffee-bean-analyzer/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["coffee_bean_analyzer*"]
+exclude = ["tests*"]
+
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
 select = [
