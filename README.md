@@ -1,166 +1,95 @@
 # Coffee Bean Analyzer
 
-A detailed computer vision system for analyzing coffee beans from images. Features automated detection, measurement, and quality assessment with coin-based scaling and parameter optimization.
+A computer vision system for automated coffee bean analysis using watershed segmentation and scale calibration. Analyzes bean dimensions, morphology, and quality metrics from images with coin-based scaling.
 
-## 🌟 Features
+## Features
 
 - **Automated Coin Detection** - Uses coins as reference for real-world measurements
-- **Bean Segmentation** - Advanced image processing to identify individual beans
-- **Morphological Analysis** - Length, width, area, aspect ratio, and other measurements
+- **Bean Segmentation** - Watershed segmentation to identify individual beans
+- **Morphological Analysis** - Length, width, area, aspect ratio measurements
 - **Parameter Optimization** - Automatically tunes detection parameters using ground truth
-- **Detailed Reporting** - Detailed analysis reports with visualizations
-- **Batch Processing** - Process multiple images automatically
-- **Modular Architecture** - Clean, extensible codebase with pluggable components
+- **CLI Interface** - Easy-to-use command line tool
+- **Batch Processing** - Process multiple images efficiently
+- **Modular Architecture** - Clean, extensible codebase
 
-## 📊 Sample Results
+## Quick Start
 
-The analyzer produces detailed visualizations and measurements:
-
-- Binary segmentation masks
-- Labeled region identification  
-- Annotated bean detection results
-- Statistical distributions and correlations
-- Optimization comparison reports
-
-## 🚀 Quick Start
-
-### Prerequisites
+### Environment Setup
 
 ```bash
 # Create conda environment
-conda create -n coffee-analysis python=3.8
-conda activate coffee-analysis
+conda create -n coffee-bean-analyzer python=3.10
+conda activate coffee-bean-analyzer
 
-# Install dependencies
-pip install -r requirements.txt
+# Install package with dependencies
+pip install -e .
+
+# Install development dependencies (optional)
+pip install -e ".[dev]"
 ```
 
 ### Basic Usage
 
 ```bash
 # Analyze a single image
-python analyze_beans.py path/to/your/image.tif
+coffee-bean-analyzer analyze image.jpg -o results/
 
-# With ground truth for optimization
-python analyze_beans.py image.tif --ground-truth ground_truth.csv
-
-# Batch process multiple images
-python analyze_beans.py path/to/images/ --batch
-
-# Use different configuration presets
-python analyze_beans.py image.tif --preset aggressive
+# View help
+coffee-bean-analyzer --help
 ```
 
 ### Programmatic Usage
 
 ```python
-from analyzer import CoffeeBeanAnalyzer
+from coffee_bean_analyzer.analysis.analyzer import CoffeeBeanAnalyzer
 
 # Initialize analyzer
 analyzer = CoffeeBeanAnalyzer()
 
-# Run detailed analysis
-results = analyzer.analyze_image_detailed(
-    "path/to/image.tif",
-    ground_truth_path="ground_truth.csv"
-)
-
-# Access results
-print(f"Detected {len(results['original']['measurements'])} beans")
+# Analyze image
+results = analyzer.analyze_image("path/to/image.jpg")
+print(f"Detected {len(results['measurements'])} beans")
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 coffee-bean-analyzer/
 ├── README.md
-├── requirements.txt
-├── pyproject.toml
-├── analyze_beans.py              # Main CLI script
-├── analyzer.py               # High-level analyzer class
-├── coffee_bean_analyzer/         # Core modular components
+├── pyproject.toml              # Project configuration and dependencies
+├── requirements.txt            # Empty (dependencies in pyproject.toml)
+├── analyze_beans.py            # Legacy CLI script
+├── analyzer.py                 # Legacy analyzer class
+├── coffee_bean_analyzer/       # Main package
 │   ├── __init__.py
-│   ├── core/
-│   │   ├── detector.py          # Coin detection
-│   │   ├── preprocessor.py      # Image preprocessing
-│   │   ├── segmentor.py         # Bean segmentation
-│   │   ├── measurer.py          # Morphological measurements
-│   │   └── optimizer.py         # Parameter optimization
+│   ├── analysis/
+│   │   └── analyzer.py         # High-level analyzer
+│   ├── cli/
+│   │   ├── main.py            # CLI entry point
+│   │   └── commands/
+│   │       └── analyze.py     # Analyze command
+│   ├── config/
+│   │   └── config_loader.py   # Configuration management
+│   ├── core/                  # Core processing modules
+│   │   ├── detector.py        # Coin detection
+│   │   ├── preprocessor.py    # Image preprocessing
+│   │   ├── segmentor.py       # Bean segmentation
+│   │   ├── measurer.py        # Morphological measurements
+│   │   └── optimizer.py       # Parameter optimization
+│   ├── io/
+│   │   └── data_handler.py    # File I/O operations
 │   └── utils/
-│       ├── config.py            # Configuration management
-│       ├── visualization.py     # Plotting utilities
-│       └── io_utils.py          # File I/O helpers
-├── tests/                       # Test suite
-│   ├── test_analyzer.py
-│   ├── test_components.py
-│   └── data/                    # Test images and ground truth
-└── docs/                        # Documentation
-    ├── API.md
-    ├── CONFIGURATION.md
-    └── EXAMPLES.md
+│       ├── file_finder.py     # File utilities
+│       ├── logging_config.py  # Logging setup
+│       ├── report_generator.py # Report generation
+│       └── visualization.py   # Plotting utilities
+└── tests/                     # Test suite
+    ├── test_*.py              # Unit tests
+    ├── integration/           # Integration tests
+    └── data/                  # Test data
 ```
 
-## 🔧 Configuration
-
-The analyzer supports multiple configuration presets:
-
-- **`default`** - Balanced parameters for general use
-- **`aggressive`** - More sensitive detection for difficult images
-- **`conservative`** - Stricter parameters to reduce false positives
-- **`quick`** - Faster processing with reduced accuracy
-
-### Custom Configuration
-
-```python
-# Create custom configuration
-custom_config = {
-    'gaussian_kernel': 7,
-    'clahe_clip': 3.0,
-    'binary_threshold': 0.4,
-    'min_area': 100,
-    'max_area': 5000
-}
-
-analyzer = CoffeeBeanAnalyzer()
-analyzer.segmentor.update_configuration(custom_config)
-```
-
-## 📊 Output Structure
-
-Each analysis generates a detailed output directory:
-
-```
-coffee_analysis_YYYYMMDD_HHMMSS/
-├── ANALYSIS_SUMMARY.txt          # Main summary report
-├── data/
-│   ├── bean_measurements.csv     # Detailed measurements
-│   ├── ground_truth_comparison.csv
-│   └── optimized_parameters.json
-├── images/
-│   ├── *_analysis.png           # Detailed visualizations
-│   ├── *_annotated.png          # Annotated detection results
-│   ├── *_binary_segmentation.png
-│   └── optimization_comparison.png
-└── reports/
-    ├── analysis_report.txt       # Detailed text reports
-    └── optimized_analysis_report.txt
-```
-
-## 🧪 Testing
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=coffee_bean_analyzer
-
-# Run specific test categories
-pytest -m "not slow"              # Skip slow tests
-pytest -m integration             # Only integration tests
-```
-
-## 🛠️ Development
+## Development
 
 ### Code Quality
 
@@ -173,75 +102,68 @@ ruff format .
 mypy .
 ```
 
-### Contributing
+### Testing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Add tests for new functionality
-5. Run the test suite (`pytest`)
-6. Commit your changes (`git commit -m 'Add amazing feature'`)
-7. Push to the branch (`git push origin feature/amazing-feature`)
-8. Open a Pull Request
+```bash
+# Run all tests
+pytest
 
-## 📈 Performance
+# Run with coverage
+pytest --cov=coffee_bean_analyzer
 
-- **Processing Speed**: ~2-5 seconds per image (depending on size and complexity)
-- **Memory Usage**: ~200-500MB peak (for typical 1000x1000 images)
-- **Accuracy**: 95%+ bean detection rate with proper configuration
-- **Optimization**: Can improve detection by 10-30% with ground truth data
+# Run specific test categories
+pytest -m "not slow"          # Skip slow tests
+pytest -m integration         # Only integration tests
+```
 
-## 🔬 Algorithm Details
+## Configuration
 
-### Coin Detection
-- Uses Hough Circle Transform for robust coin identification
-- Gaussian blur preprocessing for noise reduction
-- Multi-scale detection with radius constraints
+The system uses YAML configuration files with presets for different use cases:
 
-### Bean Segmentation
-- CLAHE (Contrast Limited Adaptive Histogram Equalization) preprocessing
-- Adaptive thresholding for varying lighting conditions
-- Morphological operations for noise removal
-- Watershed segmentation for touching bean separation
+- **default** - Balanced parameters for general use
+- **aggressive** - More sensitive detection
+- **conservative** - Stricter parameters to reduce false positives
 
-### Measurements
-- Contour-based morphological analysis
-- Ellipse fitting for length/width estimation
-- Real-world scaling using detected coin reference
-- Confidence scoring for measurement quality
+## Algorithm Overview
 
-## 📝 Requirements
+### Processing Pipeline
+
+1. **Preprocessing** - Gaussian blur and CLAHE enhancement
+2. **Coin Detection** - Hough Circle Transform for scale reference
+3. **Bean Segmentation** - Adaptive thresholding and watershed
+4. **Measurement** - Contour analysis and morphological features
+5. **Optimization** - Parameter tuning with ground truth (optional)
+
+### Key Techniques
+
+- **Coin Detection**: Multi-scale Hough Circle Transform
+- **Segmentation**: Watershed algorithm for touching bean separation
+- **Scaling**: Real-world measurements using coin diameter reference
+- **Feature Extraction**: Ellipse fitting and contour-based measurements
+
+## Requirements
 
 - Python 3.8+
-- OpenCV 4.0+
+- OpenCV (opencv-python-headless)
 - NumPy
 - Pandas
 - Matplotlib
 - scikit-image
-- scikit-learn (for optimization)
+- Click (CLI framework)
+- PyYAML (configuration)
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Contributing
 
-- OpenCV community for excellent computer vision tools
-- scikit-image for morphological analysis algorithms
-- Contributors and testers who helped improve the system
-
-## 📞 Support
-
-If you encounter issues or have questions:
-
-1. Check the [documentation](docs/)
-2. Search [existing issues](https://github.com/yourusername/coffee-bean-analyzer/issues)
-3. Create a [new issue](https://github.com/yourusername/coffee-bean-analyzer/issues/new) with:
-   - Your environment details
-   - Sample image (if possible)
-   - Error messages
-   - Expected vs. actual behavior
+1. Fork the repository
+2. Create a feature branch
+3. Add tests for new functionality
+4. Run the test suite
+5. Submit a pull request
 
 ---
 
-**Made with ☕ for coffee enthusiasts and researchers**
+Made with ☕ for coffee research and analysis
